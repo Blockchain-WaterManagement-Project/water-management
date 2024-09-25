@@ -3,6 +3,7 @@ import Web3 from 'web3';
 import "./index.css";
 import { useEffect, useState } from 'react';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { Dashboard } from "./components/pages/dashboard";
 import contract from './contracts/NFTCollection.json';
 
@@ -85,7 +86,7 @@ function App() {
 
   const connectWalletButton = () => {
     return (
-      <button onClick={connectWalletHandler} className='cta-button connect-wallet-button'>
+      <button onClick={connectWalletHandler} className='btn btn-primary'>
         Connect Wallet
       </button>
     )
@@ -94,10 +95,11 @@ function App() {
   const mintNftButton = () => {
     return (
       <div>
-        <h1 className="text-5xl text-red-500">Water Management Dashboard</h1>
-        <button onClick={mintNftHandler} className='cta-button mint-nft-button'>
+        {/* <h1 className="text-5xl text-red-500">Water Management Dashboard</h1>
+        <button onClick={mintNftHandler} className='btn btn-primary'>
           Mint NFT
-        </button>
+        </button> */}
+        <Dashboard/>
       </div>
     )
   }
