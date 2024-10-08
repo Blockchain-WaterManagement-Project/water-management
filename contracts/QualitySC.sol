@@ -2,54 +2,88 @@
 pragma solidity ^0.8.13;
 
 import "./NFTCollection.sol";
+import "./OracleSC.sol";
 
-contract QualitySC{
-    enum ListingStatus {
-        Tradeable,
-        Readonly,
-        Traded
-    }
-    struct Listing {
-        ListingStatus status;
-        address owner;
-        address token;
-        uint tokenId;
-        uint price;
-    }
-    uint private listingId = 0;
-    mapping (uint => Listing) private listings;
+contract QualitySC {
+  OracleSC public oracleSC;
 
-    function listToken(address _token, uint _tokenId, uint _price) external {
-        NFTCollection(_token).safeTransferFrom(msg.sender, address(this), _tokenId);
+  // Mapping of NFTs to their owners
+  mapping(address => mapping(uint256 => bool)) public nftOwners;
 
-        Listing memory _listing = Listing(
-            ListingStatus.Readonly,
-            msg.sender,
-            _token,
-            _tokenId,
-            _price
-        );
+  // Mapping of trade requests to their status
+  mapping(uint256 => TradeRequest) public tradeRequests;
 
-        listingId ++;
-        listings[listingId] = _listing;
-    }
+  // Event emitted when a trade request is made
+  event TradeRequestMade(uint256 requestId, address buyer, uint256 nftId);
 
-    function tradeToken(uint _listingId) external payable {
-        Listing storage _listing = listings[_listingId];
-        require(msg.sender != _listing.owner, "Sorry! You trade your own asset.");
-        require(_listing.status == ListingStatus.Tradeable, "Sorry! This asset cannot be traded.");
-        require(msg.value >= _listing.price, "Sorry! You do not have enough funds.");
+  // Event emitted when a trade is approved
+  event TradeApproved(uint256 requestId, address buyer, uint256 nftId);
 
-        _listing.status = ListingStatus.Traded;
+  // Event emitted when a trade is completed
+  event TradeCompleted(uint256 requestId, address buyer, uint256 nftId);
 
-        payable(_listing.owner).transfer(_listing.price);
-    }
+  // Struct to represent a trade request
+  struct TradeRequest {
+    uint256 nftId;
+    address buyer;
+    address seller;
+    uint256 fees;
+    bool approved;
+  }
 
-    function cancleTrade(uint _listingId) public{
-        Listing storage _listing = listings[_listingId];
-        require(_listing.status == ListingStatus.Tradeable, "Sorry! Listing is not tradeable.");
-        require(msg.sender == _listing.owner, "Sorry! Only owner can cancel listing.");
+  // Function to request rights to trade an NFT
+  function requestTrade(uint256 _nftId, address _seller) public {
+    // Check if the NFT exists and the buyer is not the owner
+    require(nftOwners[_seller][_nftId], "NFT does not exist or buyer is the owner");
 
-        _listing.status = ListingStatus.Readonly;
-    }
+    // Create a new trade request
+    uint256 requestId = uint256(keccak256(abi.encodePacked(_nftId, _seller, msg.sender)));
+    tradeRequests[requestId] = TradeRequest(_nftId, msg.sender, _seller, 0, false);
+
+    // Emit event
+    emit TradeRequestMade(requestId, msg.sender, _nftId);
+  }
+
+  // Function to approve a trade request
+  function approveTrade(uint256 _requestId) public {
+    // Check if the trade request exists and the caller is the seller
+    require(tradeRequests[_requestId].seller == msg.sender, "Trade request does not exist or caller is not the seller");
+
+    // Set the approved flag to true
+    tradeRequests[_requestId].approved = true;
+
+    // Emit event
+    emit TradeApproved(_requestId, tradeRequests[_requestId].buyer, tradeRequests[_requestId].nftId);
+  }
+
+  // Function to transfer fees for re-encryption and verification
+  function transferFees(uint256 _requestId, uint256 _fees) public {
+    // Check if the trade request exists and the caller is the buyer
+    require(tradeRequests[_requestId].buyer == msg.sender, "Trade request does not exist or caller is not the buyer");
+
+    // Set the fees
+    tradeRequests[_requestId].fees = _fees;
+
+    // Forward fees to OracleSC smart contract
+    oracleSC.forwardFees(_requestId, _fees);
+  }
+
+  // Function to confirm trade completion
+  function confirmTradeCompletion(uint256 _requestId, bool _verified) public {
+    // Check if the trade request exists and the caller is the OracleSC smart contract
+    require(tradeRequests[_requestId].approved, "Trade request does not exist or not approved");
+
+    // Check if the verification result is true
+    require(_verified, "Verification failed");
+
+    // Transfer payment to seller
+    payable(tradeRequests[_requestId].seller).transfer(tradeRequests[_requestId].fees);
+
+    // Transfer NFT to buyer
+    nftOwners[tradeRequests[_requestId].buyer][tradeRequests[_requestId].nftId] = true;
+    nftOwners[tradeRequests[_requestId].seller][tradeRequests[_requestId].nftId] = false;
+
+    // Emit event
+    emit TradeCompleted(_requestId, tradeRequests[_requestId].buyer, tradeRequests[_requestId].nftId);
+  }
 }
