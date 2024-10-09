@@ -7,6 +7,12 @@ import "./OracleSC.sol";
 contract QualitySC {
   OracleSC public oracleSC;
 
+  // Mapping of water rights to their corresponding quality scores
+  mapping (address => uint256) public waterRightsQuality;
+    
+  // Mapping of water rights owners to their corresponding water rights
+  mapping (address => address[]) public waterRightsOwners;
+
   // Mapping of NFTs to their owners
   mapping(address => mapping(uint256 => bool)) public nftOwners;
 
@@ -21,6 +27,12 @@ contract QualitySC {
 
   // Event emitted when a trade is completed
   event TradeCompleted(uint256 requestId, address buyer, uint256 nftId);
+
+  // Event emitted when a new water right is registered
+  event NewWaterRight(address owner, address waterRight);
+
+  // Event emitted when a water right's quality score is updated
+  event QualityUpdated(address waterRight, uint256 newQuality);
 
   // Struct to represent a trade request
   struct TradeRequest {
@@ -86,4 +98,25 @@ contract QualitySC {
     // Emit event
     emit TradeCompleted(_requestId, tradeRequests[_requestId].buyer, tradeRequests[_requestId].nftId);
   }
+  // Function to register a new water right
+  function registerWaterRight(address _owner, address _waterRight) public {
+        waterRightsOwners[_owner].push(_waterRight);
+        emit NewWaterRight(_owner, _waterRight);
+    }
+
+  // Function to update a water right's quality score
+  function updateWaterRightQuality(address _waterRight, uint256 _newQuality) public {
+        waterRightsQuality[_waterRight] = _newQuality;
+        emit QualityUpdated(_waterRight, _newQuality);
+    }
+
+  // Function to get a water right's quality score
+  function getWaterRightQuality(address _waterRight) public view returns (uint256) {
+        return waterRightsQuality[_waterRight];
+    }
+
+  // Function to get a water rights owner's water rights
+  function getWaterRightsOwner(address _owner) public view returns (address[] memory) {
+        return waterRightsOwners[_owner];
+    }
 }
