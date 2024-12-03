@@ -12,6 +12,7 @@ module.exports = {
   },
   resolve: { extensions },
   devServer: {
+    port: 5000,
     client: {
       overlay: false,
     },
