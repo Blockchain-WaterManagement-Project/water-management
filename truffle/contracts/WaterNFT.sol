@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity >=0.5.0 <0.9.0;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts@4.7.3/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts@4.7.3/utils/Counters.sol";
+import "@openzeppelin/contracts@4.7.3/token/ERC721/extensions/ERC721URIStorage.sol";
 
 contract WaterNFT is ERC721, ERC721URIStorage {
     using Counters for Counters.Counter;
@@ -21,6 +21,7 @@ contract WaterNFT is ERC721, ERC721URIStorage {
 
     constructor() ERC721("WaterNFT", "WFT") {}
 
+    // Function creates token
     function mintNFT(
         address _owner, 
         string memory _tokenURI
@@ -40,24 +41,65 @@ contract WaterNFT is ERC721, ERC721URIStorage {
         return tokenId;
     }
 
+    // Function checks if token has already been minted
+    function isTokenExisting(
+        uint256 _tokenId
+    ) external view returns (bool) {
+        return _exists(_tokenId);
+    }
+
+    // Function delete token
+    function deleteToken(
+        uint256 _tokenId
+    ) external returns (bool){
+        require(_isApprovedOrOwner(msg.sender, _tokenId), "Not approved or owner");
+        
+        // Update the token URI for the given NFT ID
+        _burn(_tokenId);
+        return true;
+    }
+
+    // Function transfers token ownership
+    function transferToken(
+        address _to,
+        uint256 _tokenId
+    ) external returns(bool){
+        require(_isApprovedOrOwner(msg.sender, _tokenId), "Not approved or owner");
+        
+        // Update the token URI for the given NFT ID
+        _transfer(msg.sender,_to, _tokenId);
+    
+        return true;
+    }
+
+    // Function updates token content
+    function updateTokenURI(
+        uint256 _tokenId, 
+        string memory _newTokenURI
+    ) external returns(bool){
+        require(_isApprovedOrOwner(msg.sender, _tokenId), "Not approved or owner"); 
+        
+        // Update the token URI for the given NFT ID
+        require(bytes(_newTokenURI).length > 0, "String must be non-zero");
+        tokenURIs[_tokenId] = _newTokenURI;
+            
+        // Emit the NFTRetrieved event
+        emit NFTRetrieved(msg.sender, _tokenId, _newTokenURI);
+        return true;
+    }
+
     // Function checks NFTs for the user
-    function getUserNFTs(address _user) external view returns (uint256[] memory) {
+    function fetchUserTokens(
+        address _user
+    ) external view returns (uint256[] memory) {
         return userNFTIds[_user];
     }
 
     // Function fetches NFT data for
-    function getNFTData(uint256 _tokenId) external returns (string memory) {
-        string memory _tokenURI = tokenURIs[_tokenId];
-        
-        // Emit the NFTRetrieved event
-        emit NFTRetrieved(msg.sender, _tokenId, _tokenURI);
-
-        return _tokenURI;
-    }
-
-    // Function checks if token has already been minted
-    function isMinted(uint256 _tokenId) external view returns (bool) {
-        return _exists(_tokenId);
+    function fetchTokenURI(
+        uint256 _tokenId
+    ) external view returns (string memory) {
+        return tokenURIs[_tokenId];
     }
 
     // Override the _burn function to clear the token URI when an NFT is burned
@@ -68,17 +110,10 @@ contract WaterNFT is ERC721, ERC721URIStorage {
         _setTokenURI(tokenId, "");
     }
 
-    // Override the supportsInterface function
-    function supportsInterface(
-        bytes4 interfaceId
-    ) public view override(ERC721, ERC721URIStorage) returns (bool) {
-        return super.supportsInterface(interfaceId);
-    }
-
     // Override the tokenURI function
     function tokenURI(
-        uint256 tokenId
+        uint256 _tokenId
     ) public view override(ERC721, ERC721URIStorage) returns (string memory) {
-        return super.tokenURI(tokenId);
+        return super.tokenURI(_tokenId);
     }
 }

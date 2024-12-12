@@ -2,7 +2,7 @@ import { useState } from "react";
 import useEth from "../../contexts/EthContext/useEth";
 
 export const Home = () =>{
-    const { state: { contract, accounts } } = useEth();
+    const { state: { contract1, accounts } } = useEth();
     const [ tokenId, setTokenId ] = useState({
       id: '',
       address: ''
@@ -34,14 +34,9 @@ export const Home = () =>{
         setTokenAddress(value);
     }
 
-    // handle contract functions
+    // handle contract1 functions
     const owner = async () => {
-        const value = await contract.methods.owner().call({ from: accounts[0] });
-        setResults(value);
-    };
-
-    const dataIPFS = async () => {
-        const value = await contract.methods.dataOwners().call({ from: accounts[0] });
+        const value = await contract1.methods.owner().call({ from: accounts[0] });
         setResults(value);
     };
 
@@ -54,8 +49,7 @@ export const Home = () =>{
             return;
         }
         const _value = tokenAddress;
-        const _res = await contract.methods.authorizedUsers(_value).send({ from: accounts[0] });
-        setResults(_res);
+        await contract1.methods.authorizedUsers(_value).send({ from: accounts[0] });
     }
 
     const addData = async (e) => {
@@ -69,7 +63,7 @@ export const Home = () =>{
 
           const _value0 = parseInt(tokenUrl.id);
           const _value1 = tokenUrl.url;
-          const _res = await contract.methods.addData(_value0, _value1).send({ from: accounts[0] });
+          const _res = await contract1.methods.addData(_value0, _value1).send({ from: accounts[0] });
           console.log(_res);
           setResults(_res);
     }
@@ -85,7 +79,7 @@ export const Home = () =>{
         }
 
           const _value0 = parseInt(tokenUrl.id);
-          const _res = await contract.methods.removeData(_value0).send({ from: accounts[0] });
+          const _res = await contract1.methods.removeData(_value0).send({ from: accounts[0] });
           setResults(_res);
     }
    
@@ -98,7 +92,7 @@ export const Home = () =>{
         return;
       }
       const _value = tokenId.address;
-      const _res = await contract.methods.addUser(_value).send({ from: accounts[0] });
+      const _res = await contract1.methods.addUser(_value).send({ from: accounts[0] });
       setResults(_res);
     }
   
@@ -111,7 +105,7 @@ export const Home = () =>{
         return;
       }
       const _value = tokenId.address;
-      const _res = await contract.methods.removeUser(_value).send({ from: accounts[0] });
+      const _res = await contract1.methods.removeUser(_value).send({ from: accounts[0] });
       setResults(_res);
     }
 
@@ -126,7 +120,7 @@ export const Home = () =>{
 
           const _value1 = parseInt(tokenId.id);
           const _value0 = tokenId.address;
-          const _res = await contract.methods.addData(_value0, _value1).send({ from: accounts[0] });
+          const _res = await contract1.methods.addData(_value0, _value1).send({ from: accounts[0] });
           setResults(_res);
     }
   
@@ -139,7 +133,7 @@ export const Home = () =>{
         return;
       }
       const _value = tokenId.address;
-      const _res = await contract.methods.isUserAuthorized(_value).send({ from: accounts[0] });
+      const _res = await contract1.methods.isUserAuthorized(_value).send({ from: accounts[0] });
       setResults(_res);
     }
   

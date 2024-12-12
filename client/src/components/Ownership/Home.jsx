@@ -115,7 +115,7 @@ export const Home = () =>{
         <div style={{ padding: '10px 20px', borderRadius: '2px', flex:'.5'}}>
             <div onClick={mintNFT} className="input-btn" style={{ width: '100%'}}>
                 <h5 style={{ fontSize: '18px', fontWeight: '500', marginTop: '10px'}}>
-                    Water Quality Metric Tokenization:
+                    contract Quality Metric Tokenization:
                 </h5>
                 <input
                     type="text"

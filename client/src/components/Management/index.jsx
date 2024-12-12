@@ -18,8 +18,8 @@ const Management = () =>{
         <div style={{ margin: '20px 30px', padding: '10px 20px'}}>
             <Title />
             {
-                !state.artifact ? <NoticeNoArtifact /> :
-                !state.contract ? <NoticeWrongNetwork /> :
+                !state.artifact1 ? <NoticeNoArtifact /> :
+                !state.contract1 ? <NoticeWrongNetwork /> :
                  management
             }
         </div>
