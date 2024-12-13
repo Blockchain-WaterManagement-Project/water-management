@@ -3,65 +3,103 @@ const WaterNFT = artifacts.require("WaterNFT");
 contract("WaterNFT", (accounts) => {
     let waterNFT;
     const owner = accounts[0];
-    const user = accounts[1];
-    const tokenURI = "https://example.com/nft/1";
+    const recipient = accounts[1];
+    const tokenURI = "http://localhost:8080/ipfs/QmQ5zVrMsUmVKAGFkyuDmkeTbcHz4GVbkCEnrgbJn7rDVP";
+    const tokenURI2 = "http";
+    const invalidTokenId = 999; // Assuming this token ID does not exist
 
     beforeEach(async () => {
         waterNFT = await WaterNFT.new();
     });
 
-    describe("Minting NFTs", () => {
-        it("should mint an NFT and assign it to the owner", async () => {
-            const tokenId = await waterNFT.mintNFT(owner, tokenURI);
-            const ownerOfToken = await waterNFT.ownerOf(tokenId);
-            const userNFTs = await waterNFT.getUserNFTs(owner);
-
-            assert.equal(ownerOfToken, owner, "The owner of the NFT should be the minter");
-            assert.equal(userNFTs.length, 1, "User  should have one NFT");
-            assert.equal(userNFTs[0].toString(), tokenId.toString(), "The NFT ID should match the minted token ID");
+    describe("MintNFT Function", () => {
+        it("should mint a new NFT successfully", async () => {
+            const tokenId = await waterNFT.mintNFT(recipient, tokenURI, { from: owner });
+            assert.equal(tokenId.logs[0].args.tokenId.toString(), "1", "Token ID should be 1");
+            const balance = await waterNFT.balanceOf(recipient);
+            assert.equal(balance.toString(), "1", "Recipient should own one NFT");
         });
 
-        it("should emit NFTMinted event on minting", async () => {
-            const result = await waterNFT.mintNFT(owner, tokenURI);
-            const event = result.logs[0].args;
-
-            assert.equal(event.owner, owner, "Event owner should match the minter");
-            assert.equal(event.tokenId.toString(), "1", "Event tokenId should be 1");
-            assert.equal(event.tokenURI, tokenURI, "Event tokenURI should match the provided URI");
-        });
-    });
-
-    describe("Retrieving NFTs", () => {
-        it("should retrieve the correct NFT data", async () => {
-            const tokenId = await waterNFT.mintNFT(owner, tokenURI);
-            const retrievedURI = await waterNFT.getNFTData(tokenId);
-
-            assert.equal(retrievedURI, tokenURI, "The retrieved URI should match the original URI");
+        it("should fail to mint NFT with invalid recipient address", async () => {
+            try {
+                const tokenId = await waterNFT.mintNFT("0x0000000000000000000000000000000000000000", tokenURI, { from: owner });
+                assert.fail("Expected revert not received");
+            } catch (error) {
+                assert(error.message.includes("Invalid recipient address: cannot be zero address"), "Expected revert error not received");
+            }
         });
 
-        it("should emit NFTRetrieved event on fetching NFT data", async () => {
-            const tokenId = await waterNFT.mintNFT(owner, tokenURI);
-            const result = await waterNFT.getNFTData(tokenId);
-            const event = result.logs[0].args;
-
-            assert.equal(event.user, owner, "Event user should match the caller");
-            assert.equal(event.tokenId.toString(), tokenId.toString(), "Event tokenId should match the retrieved token ID");
-            assert.equal(event.tokenURI, tokenURI, "Event tokenURI should match the original URI");
+        it("should fail to mint NFT with empty token URI", async () => {
+            try {
+                await waterNFT.mintNFT(recipient, "", { from: owner });
+                assert.fail("Expected revert not received");
+            } catch (error) {
+                assert(error.message.includes("String must be non-zero"), "Expected revert error not received");
+            }
         });
     });
 
-    describe("Checking NFT status", () => {
-        it("should return true for minted NFTs", async () => {
-            const tokenId = await waterNFT.mintNFT(owner, tokenURI);
-            const isMinted = await waterNFT.isMinted(tokenId);
-
-            assert.isTrue(isMinted, "The NFT should be marked as minted");
+    describe("UpdateNFT Function", () => {
+        beforeEach(async () => {
+            await waterNFT.mintNFT(recipient, tokenURI, { from: owner });
         });
 
-        it("should return false for non-existent NFTs", async () => {
-            const isMinted = await waterNFT.isMinted(999); // Assuming 999 has not been minted
+        it("should update the NFT URI successfully", async () => {
+            const newTokenURI = "http://localhost:8080/ipfs/QmYymfKenBQWrYfi7MBtqTYLhzFJDQWbNJfVd6VpF3e6on";
+            const result = await waterNFT.updateNFT(1, newTokenURI, { from: recipient });
+            assert.equal(result.logs[0].args.tokenId.toString(), "1", "Token ID should be 1");
+            const updatedURI = await waterNFT.fetchTokenURI(1);
+            assert.equal(updatedURI, newTokenURI, "Token URI should be updated");
+        });
 
-            assert.isFalse(isMinted, "The NFT should not be marked as minted");
+        it("should fail to update NFT with invalid token ID", async () => {
+            try {
+                await waterNFT.updateNFT(invalidTokenId, tokenURI, { from: recipient });
+                assert.fail("Expected revert not received");
+            } catch (error) {
+                assert(error.message.includes("revert"), "Expected revert error not received");
+            }
+        });
+
+        it("should fail to update NFT with empty URI", async () => {
+            try {
+                await waterNFT.updateNFT(1, "", { from: recipient });
+                assert.fail("Expected revert not received");
+            } catch (error) {
+                assert(error.message.includes("String must be non-zero"), "Expected revert error not received");
+            }
+        });
+    });
+
+    describe("BurnNFT Function", () => {
+        beforeEach(async () => {
+            await waterNFT.mintNFT(recipient, tokenURI, { from: owner });
+        });
+
+        it("should burn the NFT successfully", async () => {
+            const result = await waterNFT.burnNFT(1, { from: recipient });
+            assert.equal(result.logs[0].args.tokenId.toString(), "1", "Token ID should be 1");
+            const balance = await waterNFT.balanceOf(recipient);
+            assert.equal(balance.toString(), "0", "Recipient should own no NFTs after burning");
+        });
+
+        it("should fail to burn NFT with invalid token ID", async () => {
+            try {
+                await waterNFT.burnNFT(invalidTokenId, { from: recipient });
+                assert.fail("Expected revert not received");
+            } catch (error) {
+                assert(error.message.includes("revert"), "Expected revert error not received");
+            }
+        });
+
+        it("should fail to burn an already burned NFT", async () => {
+            await waterNFT.burnNFT(1, { from: recipient });
+            try {
+                await waterNFT.burnNFT(1, { from: recipient });
+                assert.fail("Expected revert not received");
+            } catch (error) {
+                assert(error.message.includes("revert"), "Expected revert error not received");
+            }
         });
     });
 });
