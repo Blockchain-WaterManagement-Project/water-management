@@ -1,0 +1,63 @@
+### Generate Keys for Alice
+POST http://localhost:3000/keys/generate
+Content-Type: application/json
+
+{
+    "username": "alice"
+}
+
+### Generate Keys for Bob
+POST http://localhost:3000/keys/generate
+Content-Type: application/json
+
+{
+    "username": "bob"
+}
+
+### Alice: Encrypt Data
+POST http://localhost:3000/encrypt
+Content-Type: application/json
+
+{
+    "username": "alice",
+    "plaintext": "Hello, Bob! This is a secure message."
+}
+
+### Alice: Decrypt Data
+POST http://localhost:3000/decrypt
+Content-Type: application/json
+
+{
+    "username": "alice",
+    "ciphertext": ""
+}
+
+### Re-encrypt keys for Data from Alice to Bob
+POST http://localhost:3000/reencryption-key
+Content-Type: application/json
+
+{
+    "sender": "alice",
+    "recipient": "bob"
+}
+
+### Re-encrypt ciphertext for Bob to decrypt
+POST http://localhost:3000/reencrypt
+Content-Type: application/json
+
+{
+    "ciphertext": "MII...Encrypted_Message...",
+    "reEncryptionKey": {
+        "senderPrivateKeyPem": "-----BEGIN PRIVATE KEY-----\nAlice_Private_Key...\n-----END PRIVATE KEY-----",
+        "recipientPublicKeyPem": "-----BEGIN PUBLIC KEY-----\nBob_Public_Key...\n-----END PUBLIC KEY-----"
+    }
+}
+
+### Bob: Decrypt Reencrypted Data
+POST http://localhost:3000/decrypt
+Content-Type: application/json
+
+{
+    "username": "bob",
+    "ciphertext": "MII...ReEncrypted_Message..."
+}

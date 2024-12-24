@@ -1,5 +1,5 @@
 {
-  "name": "truffle-client",
+  "name": "Water-Management-System",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,6 +7,8 @@
     "start": "webpack serve"
   },
   "dependencies": {
+    "buffer": "^6.0.3",
+    "ipfs-http-client": "^60.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "web3": "^1.8.2"
