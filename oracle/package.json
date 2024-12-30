@@ -1,0 +1,35 @@
+{
+  "name": "oracle-server",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "scripts": {
+    "develop": "nodemon --exec babel-node src",
+    "test": "mocha --require babel-core/register",
+    "build": "rimraf lib && babel src -d lib",
+    "start": "node lib",
+    "lint": "eslint src"
+  },
+  "repository": "https://github.com",
+  "keywords": [],
+  "author": "Banda William <adsonwilliambanda@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "install": "^0.13.0",
+    "request": "^2.88.2",
+    "request-promise-native": "^1.0.9",
+    "truffle-hdwallet-provider": "^1.0.17",
+    "web3": "^4.15.0",
+    "wenpm": "^0.0.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^9.15.0",
+    "mocha": "^10.8.2",
+    "nodemon": "^3.1.7",
+    "rimraf": "^6.0.1"
+  }
+}
