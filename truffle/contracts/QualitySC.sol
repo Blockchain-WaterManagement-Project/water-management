@@ -11,9 +11,6 @@ contract QualitySC {
         bool granted;
     }
 
-    WaterNFT public waterNFT; // Instance of the WaterNFT contract
-    OracleSC public oracleSC; // Instance of the Oracle contract
-
     // Mapping from token ID to data metadata
     mapping(uint256 => string) public dataStorage;
     mapping(address => DataRequest[]) public accessRequests;
@@ -24,20 +21,15 @@ contract QualitySC {
     event DataUploaded(uint256 indexed tokenId, string ipfsHash, address indexed owner);
     event UserAdded(address indexed user);
     event UserRemoved(address indexed user);
-    event DataAccessRequested(uint256 indexed tokenId, address indexed receiver);
-    event DataAccessRevoked(uint256 indexed tokenId, address indexed receiver);
-    event DataAccessGranted(uint256 indexed tokenId, address indexed owner, address indexed receiver);
+    event AccessRequested(uint256 indexed tokenId, address indexed receiver);
+    event AccessRevoked(uint256 indexed tokenId, address indexed receiver);
+    event AccessGranted(uint256 indexed tokenId, address indexed owner, address indexed receiver);
     event DataRemoved(uint256 indexed tokenId, address indexed owner); // New event for data removal
 
     // Only the contract owner can manage users
     address public owner;
 
-    constructor(
-        address _waterNFTAddress, 
-        address _oracleAddress
-    ) {
-        waterNFT = WaterNFT(_waterNFTAddress); // Initialize the WaterNFT contract
-        oracleSC = OracleSC(_oracleAddress); // Initialize the Oracle contract
+    constructor() {
         owner = msg.sender; // Set the contract deployer as the owner
     }
 
@@ -173,7 +165,7 @@ contract QualitySC {
         }
 
         accessRequests[dataOwners[_tokenId]].push(DataRequest(msg.sender, _tokenId, false));
-        emit DataAccessRequested(_tokenId, msg.sender);
+        emit AccessRequested(_tokenId, msg.sender);
         return true;
     }
 
@@ -186,7 +178,7 @@ contract QualitySC {
         for (uint256 i = 0; i < accessRequests[msg.sender].length; i++) {
             if (accessRequests[msg.sender][i].requester == _user && accessRequests[msg.sender][i].tokenId == _tokenId) {
                 accessRequests[msg.sender][i].granted = true;
-                emit DataAccessGranted(_tokenId, msg.sender, _user);
+                emit AccessGranted(_tokenId, msg.sender, _user);
                 return true;
             }
         }
@@ -202,7 +194,7 @@ contract QualitySC {
         for (uint256 i = 0; i < accessRequests[msg.sender].length; i++) {
             if (accessRequests[msg.sender][i].requester == _user && accessRequests[msg.sender][i].tokenId == _tokenId) {
                 delete accessRequests[msg.sender][i]; // Remove the access request
-                emit DataAccessRevoked(_tokenId, _user);
+                emit AccessRevoked(_tokenId, _user);
                 return true;
             }
         }

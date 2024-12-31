@@ -12,5 +12,5 @@ module.exports = async function (_deployer) {
   const oracleInstance = await OracleSC.deployed();
 
   // Deploy QualitySC contract with the addresses of WaterNFT and OracleSC
-  await _deployer.deploy(QualitySC, waterNFTInstance.address, oracleInstance.address);
+  await _deployer.deploy(QualitySC);
 };

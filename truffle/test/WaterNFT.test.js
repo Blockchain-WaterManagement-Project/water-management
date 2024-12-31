@@ -13,14 +13,14 @@ contract("WaterNFT", (accounts) => {
     });
 
     describe("MintNFT Function", () => {
-        it("should mint a new NFT successfully", async () => {
+        it("The Data Owner should mint a new NFT successfully", async () => {
             const tokenId = await waterNFT.mintNFT(recipient, tokenURI, { from: owner });
             assert.equal(tokenId.logs[0].args.tokenId.toString(), "1", "Token ID should be 1");
             const balance = await waterNFT.balanceOf(recipient);
             assert.equal(balance.toString(), "1", "Recipient should own one NFT");
         });
 
-        it("should fail to mint NFT with invalid recipient address", async () => {
+        it("should fail to mint NFT with invalid Data Owner address", async () => {
             try {
                 const tokenId = await waterNFT.mintNFT("0x0000000000000000000000000000000000000000", tokenURI, { from: owner });
                 assert.fail("Expected revert not received");
