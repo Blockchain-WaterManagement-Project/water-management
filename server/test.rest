@@ -1,0 +1,33 @@
+### Mint a new NFT
+POST http://localhost:3000/api/nfts
+Content-Type: application/json
+
+{
+    "tokenData": {
+        "name": "My First NFT",
+        "description": "This is a description of my first NFT.",
+        "image": "https://example.com/image.png"
+    }
+}
+
+### Update an existing NFT
+PUT http://localhost:3000/api/nfts/1
+Content-Type: application/json
+
+{
+    "updatedData": {
+        "name": "Updated NFT Name",
+        "description": "This is an updated description."
+    }
+}
+
+### Upload data to IPFS
+POST http://localhost:3000/api/storage/upload
+Content-Type: application/json
+
+{
+    "data": "This is the data I want to upload to IPFS."
+}
+
+### Retrieve data from IPFS
+GET http://localhost:3000/api/storage/retrieve/<CID>
