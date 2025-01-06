@@ -1,5 +1,5 @@
 ### Generate Keys for Alice
-POST http://localhost:3000/keys/generate
+POST http://localhost:3000/api/keys/generate
 Content-Type: application/json
 
 {
@@ -7,7 +7,7 @@ Content-Type: application/json
 }
 
 ### Generate Keys for Bob
-POST http://localhost:3000/keys/generate
+POST http://localhost:3000/api/keys/generate
 Content-Type: application/json
 
 {
@@ -15,16 +15,16 @@ Content-Type: application/json
 }
 
 ### Alice: Encrypt Data
-POST http://localhost:3000/encrypt
+POST http://localhost:3000/api/encrypt
 Content-Type: application/json
 
 {
     "username": "alice",
-    "plaintext": "Hello, Bob! This is a secure message."
+    "plaintext": "Hello, Bob! This is a secure message. Maybe something is wrong I dont know what anything means anymore maybe you can tell what is happening."
 }
 
 ### Alice: Decrypt Data
-POST http://localhost:3000/decrypt
+POST http://localhost:3000/api/decrypt
 Content-Type: application/json
 
 {
@@ -33,7 +33,7 @@ Content-Type: application/json
 }
 
 ### Re-encrypt keys for Data from Alice to Bob
-POST http://localhost:3000/reencryption-key
+POST http://localhost:3000/api/reencryption-key
 Content-Type: application/json
 
 {
@@ -42,7 +42,7 @@ Content-Type: application/json
 }
 
 ### Re-encrypt ciphertext for Bob to decrypt
-POST http://localhost:3000/reencrypt
+POST http://localhost:3000/api/reencrypt
 Content-Type: application/json
 
 {
@@ -54,10 +54,106 @@ Content-Type: application/json
 }
 
 ### Bob: Decrypt Reencrypted Data
-POST http://localhost:3000/decrypt
+POST http://localhost:3000/api/decrypt
 Content-Type: application/json
 
 {
     "username": "bob",
     "ciphertext": "MII...ReEncrypted_Message..."
 }
+
+### Add file to ipfs
+POST http://localhost:3000/api/ipfs/add 
+Content-Type: application/json
+
+{
+    "path": "come home mate",
+    "content": "Hello, IPFS!"
+}
+
+### Get file from IPFS
+GET http://localhost:3000/api/ipfs/get/QmYymfKenBQWrYfi7MBtqTYLhzFJDQWbNJfVd6VpF3e6on
+
+### List files from IPFS
+GET http://localhost:3000/api/ipfs/list/QmYymfKenBQWrYfi7MBtqTYLhzFJDQWbNJfVd6VpF3e6on
+
+### Add File
+POST http://localhost:3000/api/decentralize/add
+Content-Type: application/json
+
+{
+  "content": "Hello IPFS!"
+}
+
+### Get File
+GET http://localhost:3000/api/decentralize/file/<cid>
+
+### Update File
+PUT http://localhost:3000/api/decentralize/file/<cid>
+Content-Type: application/json
+
+{
+  "newContent": "Updated IPFS content!"
+}
+
+### Delete File
+DELETE http://localhost:3000/api/decentralize/file/<cid>
+
+########################################################################################################################
+####################################################### User Management
+############################ Generate Keys for a User
+POST http://localhost:3000/api/users/generate-keys
+Content-Type: application/json
+
+{
+    "username": "testuser"
+}
+
+### Generate Keys for Another User
+POST http://localhost:3000/api/users/generate-keys
+Content-Type: application/json
+
+{
+    "username": "anotheruser"
+}
+
+### Encrypt Data for Themselves
+POST http://localhost:3000/api/users/encrypt-for-self
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "plaintext": "Hello, World!"
+}
+
+### Re-encrypt Data for Another User
+POST http://localhost:3000/api/users/re-encrypt-data
+Content-Type: application/json
+
+{
+    "senderUsername": "testuser",
+    "recipientUsername": "anotheruser",
+    "ciphertext": "CIPHERTEXT_HERE"
+}
+
+### Decrypt Data for Themselves
+POST http://localhost:3000/api/users/decrypt-for-self
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "ciphertext": "CIPHERTEXT_HERE"
+}
+
+### Decrypt Re-encrypted Data for Another User
+POST http://localhost:3000/api/users/decrypt-re-encrypted-data
+Content-Type: application/json
+
+{
+    "username": "anotheruser",
+    "reEncryptedCiphertext": "RE_ENCRYPTED_CIPHERTEXT_HERE"
+}
+
+########################################################################################################################
+####################################################### Data Sharing
+
