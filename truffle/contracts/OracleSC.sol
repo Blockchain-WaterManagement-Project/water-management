@@ -1,87 +1,80 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.5.0 <0.9.0;
 
+interface IQualitySC {
+    function grantAccess(address user, uint256 tokenId, uint256 accessPeriod) external;
+}
+
+interface IWaterNFT {
+    function fetchTokenURI(uint256 tokenId) external view returns (string memory);
+    function updateNFT(uint256 tokenId, string memory newTokenURI) external;
+}
+
 contract OracleSC {
-    struct Request {
-        uint id;
-        string urlToQuery;
-        string attributeToFetch;
-        string response;
-        mapping(address => uint) quorum; // Mapping for oracle votes
-        string[] answers; // Array to store answers from oracles
-        string agreedValue; // The agreed value after reaching quorum
+    struct Metadata {
+        string tokenURI;
+        address owner;
+        mapping(address => bytes) users; // mapping of users to their re-encrypted data
     }
 
-    Request[] public requests;
-    uint public currentId;
-    uint public totalOracleCount; // Total number of oracles
-    uint public minQuorum; // Minimum number of votes required for agreement
+    mapping(uint256 => Metadata) public metadataMapping; // Mapping from tokenID to Metadata
+    mapping(address => uint256) public accessExpiry; // Access expiry tracking
+    address public qualitySCAddress;
+    address public waterNFTAddress;
 
-    event NewRequest(uint indexed id, string urlToQuery, string attributeToFetch);
-    event UpdateRequest(uint indexed id, string urlToQuery, string attributeToFetch, string agreedValue);
+    event AccessGranted(address indexed user, uint256 tokenId, uint256 accessPeriod, uint256 timestamp);
+    event MetadataUpdated(uint256 tokenId, string tokenURI, uint256 timestamp);
+    event CountdownStarted(uint256 tokenId, address indexed user, uint256 duration, uint256 timestamp);
+    event AccessTimeUp(uint256 tokenId, address indexed user, uint256 timestamp);
 
-    function createRequest(
-        string memory _urlToQuery,
-        string memory _attributeToFetch
-    ) public {
-        // Create a new Request instance
-        Request storage newRequest = requests.push(); // Push an empty Request to the array
-
-        // Set properties
-        newRequest.id = currentId;
-        newRequest.urlToQuery = _urlToQuery;
-        newRequest.attributeToFetch = _attributeToFetch;
-        newRequest.agreedValue = ""; // Initialize agreedValue
-        newRequest.answers = new string[](totalOracleCount); // Initialize answers array
-
-        // Initialize the quorum mapping for trusted oracles
-        newRequest.quorum[address(0xdF3e30bDa5C003aE01Cf56c81Db062A7C3e97FBF)] = 1;
-        newRequest.quorum[address(0x6027FBa263F4d3E95B160EF934a04358A31Eb707)] = 1;
-        newRequest.quorum[address(0x3DC9B467624fd0ccD09d60d5708Db1a9aD392EcA)] = 1;
-
-        // Emit event for new request
-        emit NewRequest(currentId, _urlToQuery, _attributeToFetch);
-
-        // Increment request id
-        currentId++;
+    modifier onlyOwner(uint256 tokenId) {
+        require(msg.sender == metadataMapping[tokenId].owner, "Not the owner");
+        _;
     }
 
-    function updateRequest(
-        uint _id,
-        string memory _valueRetrieved
-    ) public {
-        Request storage currentRequest = requests[_id];
+    constructor(address _qualitySCAddress, address _waterNFTAddress) {
+        qualitySCAddress = _qualitySCAddress;
+        waterNFTAddress = _waterNFTAddress;
+    }
 
-        // Check if oracle has voted
-        if (currentRequest.quorum[address(msg.sender)] == 1) {
-            currentRequest.quorum[msg.sender] = 2; // Mark as voted
+    // Called by QualitySC to initiate the time-sharing request
+    function processTimeSharing(uint256 tokenId, address user, uint256 accessPeriod) public {
+        // Emit event for access initiation
+        emit AccessGranted(user, tokenId, accessPeriod, block.timestamp);
 
-            // Find first empty slot in answers
-            for (uint temp = 0; temp < totalOracleCount; temp++) {
-                if (bytes(currentRequest.answers[temp]).length == 0) {
-                    currentRequest.answers[temp] = _valueRetrieved; // Store the retrieved value
-                    break; // Exit after storing the value
-                }
-            }
+        // Grant access using QualitySC contract
+        IQualitySC(qualitySCAddress).grantAccess(user, tokenId, accessPeriod);
 
-            uint currentQuorum = 0;
+        // Start countdown timer for access
+        startCountdown(tokenId, user, accessPeriod);
+    }
 
-            // Check for matching answers
-            for (uint i = 0; i < totalOracleCount; i++) {
-                if (keccak256(bytes(currentRequest.answers[i])) == keccak256(bytes(_valueRetrieved))) {
-                    currentQuorum++;
-                    if (currentQuorum >= minQuorum) {
-                        currentRequest.agreedValue = _valueRetrieved; // Set the agreed value
-                        emit UpdateRequest(
-                            currentRequest.id,
-                            currentRequest.urlToQuery,
-                            currentRequest.attributeToFetch,
-                            currentRequest.agreedValue
-                        );
-                        break; // Exit once quorum is reached
-                    }
-                }
-            }
-        }
+    // Start countdown for the user
+    function startCountdown(uint256 tokenId, address user, uint256 duration) public onlyOwner(tokenId) {
+        accessExpiry[user] = block.timestamp + duration;
+        emit CountdownStarted(tokenId, user, duration, block.timestamp);
+    }
+
+    // Check if the user's access time has expired
+    function checkAccessExpiration(address user) public view returns (bool) {
+        return block.timestamp >= accessExpiry[user];
+    }
+
+    // Function to handle access time expiration
+    function accessTimeUp(uint256 tokenId, address user) public onlyOwner(tokenId) {
+        require(block.timestamp >= accessExpiry[user], "Access time has not expired yet");
+
+        // Nullify user's access in metadata
+        metadataMapping[tokenId].users[user] = "";
+        string memory newTokenURI = metadataMapping[tokenId].tokenURI; // Retrieve tokenURI
+        IWaterNFT(waterNFTAddress).updateNFT(tokenId, newTokenURI); // Update the NFT with the new metadata
+
+        emit AccessTimeUp(tokenId, user, block.timestamp);
+    }
+
+    // Function to update NFT metadata after data is re-encrypted
+    function updateNFT(uint256 tokenId, string memory newTokenURI) public onlyOwner(tokenId) {
+        metadataMapping[tokenId].tokenURI = newTokenURI;
+        emit MetadataUpdated(tokenId, newTokenURI, block.timestamp);
     }
 }

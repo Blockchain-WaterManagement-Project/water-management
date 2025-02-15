@@ -1,5 +1,4 @@
 const IpfsModel = require('../model/decentralizeModel');
-const fs = require('fs'); 
 
 class IpfsController {
   static async addFile(req, res) {

@@ -5,12 +5,13 @@ const QualitySC = artifacts.require("QualitySC");
 module.exports = async function (_deployer) {
   // Deploy WaterNFT contract
   await _deployer.deploy(WaterNFT);
-  const waterNFTInstance = await WaterNFT.deployed();
-
-  // Deploy OracleSC contract
-  await _deployer.deploy(OracleSC);
-  const oracleInstance = await OracleSC.deployed();
+  const instanceW = await WaterNFT.deployed();
 
   // Deploy QualitySC contract with the addresses of WaterNFT and OracleSC
   await _deployer.deploy(QualitySC);
+  const instanceQ = await QualitySC.deployed();
+
+  // Deploy OracleSC contract
+  await _deployer.deploy(OracleSC, instanceQ.address, instanceW.address);
+  const instanceO = await OracleSC.deployed();
 };

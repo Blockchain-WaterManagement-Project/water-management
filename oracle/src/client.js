@@ -7,8 +7,8 @@ import {
 
 const start = () => {
 
-  let urlToQuery = 'http://localhost:8080/ipfs/QmYymfKenBQWrYfi7MBtqTYLhzFJDQWbNJfVd6VpF3e6on';
-  let attributeToFetch = 'IPFS';
+  let urlToQuery = 'http://localhost:3001/2';
+  let attributeToFetch = 'name';
 
   createRequest({
       urlToQuery,

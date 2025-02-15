@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.5.0 <0.9.0;
 
-import "./WaterNFT.sol"; // Import the WaterNFT contract
-import "./OracleSC.sol"; // Import the Oracle contract
+// import "./WaterNFT.sol"; // Import the WaterNFT contract
+// import "./OracleSC.sol"; // Import the Oracle contract
 
 contract QualitySC {
     struct DataRequest {
@@ -85,48 +85,48 @@ contract QualitySC {
 
     // Function to upload data and mint a token
     function addData(
-        uint256 _tokenId, 
-        string memory _tokenURI
+        uint256 tokenId, 
+        string memory tokenURI
     ) external returns (bool) {
         // Ensure the caller is an authorized user
         require(authorizedUsers[msg.sender] == true, "User  is not authorized");
 
         // Optional: Validate the IPFS hash (e.g., check length)
-        require(bytes(_tokenURI).length > 0, "IPFS hash cannot be empty");
+        require(bytes(tokenURI).length > 0, "IPFS hash cannot be empty");
 
         // Check if the token ID is already in use
-        require(dataOwners[_tokenId] == address(0), "Token ID is already in use");
+        require(dataOwners[tokenId] == address(0), "Token ID is already in use");
 
         // Set the data owner to the caller
-        dataOwners[_tokenId] = msg.sender;
+        dataOwners[tokenId] = msg.sender;
 
         // Store the IPFS hash associated with the token ID
-        dataStorage[_tokenId] = _tokenURI;
+        dataStorage[tokenId] = tokenURI;
 
         // Emit an event to signal that data has been uploaded
-        emit DataUploaded(_tokenId, _tokenURI, msg.sender);
+        emit DataUploaded(tokenId, tokenURI, msg.sender);
         return true;
     }
 
     // Function to remove data associated with a token ID
     function removeData(
-        uint256 _tokenId
+        uint256 tokenId
     ) external returns (bool) {
         // Ensure the caller is the data owner
-        require(msg.sender == dataOwners[_tokenId], "Only the data owner can remove data");
+        require(msg.sender == dataOwners[tokenId], "Only the data owner can remove data");
 
         // Check if the token ID is valid
-        require(isDataAdded(_tokenId), "Invalid token ID");
+        require(isDataAdded(tokenId), "Invalid token ID");
 
         // Check if the token ID is not already removed
-        require(dataOwners[_tokenId] != address(0), "Token ID is already removed");
+        require(dataOwners[tokenId] != address(0), "Token ID is already removed");
 
         // Clear the IPFS hash
-        delete dataStorage[_tokenId];
+        delete dataStorage[tokenId];
 
         // Clean up access requests related to the token ID
         for (uint256 i = 0; i < accessRequests[msg.sender].length; i++) {
-            if (accessRequests[msg.sender][i].tokenId == _tokenId) {
+            if (accessRequests[msg.sender][i].tokenId == tokenId) {
                 // Shift the remaining elements to fill the gap
                 for (uint256 j = i; j < accessRequests[msg.sender].length - 1; j++) {
                     accessRequests[msg.sender][j] = accessRequests[msg.sender][j + 1];
@@ -138,47 +138,54 @@ contract QualitySC {
         }
 
         // Clean up data owner mapping
-        delete dataOwners[_tokenId];
+        delete dataOwners[tokenId];
 
-        emit DataRemoved(_tokenId, msg.sender); // Emit event for data removal
+        emit DataRemoved(tokenId, msg.sender); // Emit event for data removal
         return true;
     }
 
     function isDataAdded(
-        uint256 _tokenId
+        uint256 tokenId
     ) public view returns(bool){
-        return (dataOwners[_tokenId] != address(0));
+        return (dataOwners[tokenId] != address(0));
     }
 
     // Function for Data Users to request access
     function requestAccess(
-        uint256 _tokenId
+        uint256 tokenId, 
+        uint timePeriod
     ) external returns (bool) {
         // Check if the token ID is valid
-        require(dataOwners[_tokenId] != address(0), "Invalid token ID");
+        require(dataOwners[tokenId] != address(0), "Only data users with valid address");
+
+        // Check if time period is valid
+        require(timePeriod > 0, "Only time period greater than 0");
 
         // Check if the user has already requested access
-        for (uint256 i = 0; i < accessRequests[dataOwners[_tokenId]].length; i++) {
-            if (accessRequests[dataOwners[_tokenId]][i].requester == msg.sender && accessRequests[dataOwners[_tokenId]][i].tokenId == _tokenId) {
+        for (uint256 i = 0; i < accessRequests[dataOwners[tokenId]].length; i++) {
+            if (accessRequests[dataOwners[tokenId]][i].requester == msg.sender && accessRequests[dataOwners[tokenId]][i].tokenId == tokenId) {
                 return false; // Access already requested
             }
         }
 
-        accessRequests[dataOwners[_tokenId]].push(DataRequest(msg.sender, _tokenId, false));
-        emit AccessRequested(_tokenId, msg.sender);
+        accessRequests[dataOwners[tokenId]].push(DataRequest(msg.sender, tokenId, false));
+        emit AccessRequested(tokenId, msg.sender);
         return true;
     }
 
     // Function for Data Owners to grant access
     function grantAccess(
-        address _user, 
-        uint256 _tokenId
+        address user, 
+        uint256 tokenId,
+        uint256 accessPeriod
     ) external returns (bool) {
-        require(msg.sender == dataOwners[_tokenId], "Only the data owner can grant access");
+        require(msg.sender == dataOwners[tokenId], "Only the data owner can grant access");
+        require(accessPeriod > 0, "Only the access period greater than 0");
+
         for (uint256 i = 0; i < accessRequests[msg.sender].length; i++) {
-            if (accessRequests[msg.sender][i].requester == _user && accessRequests[msg.sender][i].tokenId == _tokenId) {
+            if (accessRequests[msg.sender][i].requester == user && accessRequests[msg.sender][i].tokenId == tokenId) {
                 accessRequests[msg.sender][i].granted = true;
-                emit AccessGranted(_tokenId, msg.sender, _user);
+                emit AccessGranted(tokenId, msg.sender, user);
                 return true;
             }
         }

@@ -61,15 +61,44 @@ export const updateRequest = ({
 };
 
 // Listen for new requests
-export const newRequest = (callback) => {
-  contract.events.NewRequest()
-    .on('data', (event) => callback(null, event))
-    .on('error', (error) => callback(error));
-};
+export const newRequest = ((error, event) => {
+  if (error) {
+    console.error('Error listening for new requests:', error);
+  } else {
+    // Extracting the relevant data from the event
+    const { transactionHash, blockNumber, args } = event;
+    const [requester, urlToQuery, attributeToFetch] = args;
+
+    console.log('New request event received:');
+    console.log('Transaction Hash:', transactionHash);
+    console.log('Block Number:', blockNumber);
+    console.log('Requester:', requester);
+    console.log('URL to Query:', urlToQuery);
+    console.log('Attribute to Fetch:', attributeToFetch);
+  }
+});
+
+
+export const updatedRequest = ((error, event) => {
+  if (error) {
+    console.error('Error listening for new requests:', error);
+  } else {
+    // Extracting the relevant data from the event
+    const { transactionHash, blockNumber, args } = event;
+    const [requester, urlToQuery, attributeToFetch] = args;
+
+    console.log('Update request event received:');
+    console.log('Transaction Hash:', transactionHash);
+    console.log('Block Number:', blockNumber);
+    console.log('Requester:', requester);
+    console.log('URL to Query:', urlToQuery);
+    console.log('Attribute to Fetch:', attributeToFetch);
+  }
+});
 
 // Listen for updated requests
-export const updatedRequest = (callback) => {
-  contract.events.UpdatedRequest()
-    .on('data', (event) => callback(null, event))
-    .on('error', (error) => callback(error));
-};
+// // export const updatedRequest = (callback) => {
+// //   contract.events.UpdatedRequest()
+// //     .on('data', (event) => callback(null, event))
+// //     .on('error', (error) => callback(error));
+// // };

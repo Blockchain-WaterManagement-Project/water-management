@@ -16,7 +16,8 @@ contract WaterNFT is ERC721, ERC721URIStorage {
     mapping(uint256 => address) private tokenOwners;
 
     // Mapping from token ID to its URI
-    mapping(uint256 => string) private tokenURIs;
+    mapping(uint256 => string) public tokenURIs;
+    uint256[] private allTokenIds;
 
     // Events
     event DataCreated(address indexed owner, uint256 indexed tokenId, string tokenURI);
@@ -28,104 +29,110 @@ contract WaterNFT is ERC721, ERC721URIStorage {
 
     // Function creates NFT
     function mintNFT(
-        address _owner, 
-        string memory _tokenURI
+        address owner, 
+        string memory newTokenURI
     ) external returns (uint256) {
         // Ensure owner is a valid address
-        require(_owner != address(0), "Invalid recipient address: cannot be zero address");
+        require(owner != address(0), "Invalid recipient address: cannot be zero address");
         // Ensure tokenURI is a non-empty string
-        require(bytes(_tokenURI).length > 7, "String must be non-zero");  
+        require(bytes(newTokenURI).length > 7, "String must be non-zero");  
 
         _tokenIds.increment();
         uint256 tokenId = _tokenIds.current();
-        _mint(_owner, tokenId);
-        _setTokenURI(tokenId, _tokenURI);
+        _mint(owner, tokenId);
+        _setTokenURI(tokenId, newTokenURI);
 
         // Store the NFT for the user
-        userNFTIds[_owner].push(tokenId);
-        tokenURIs[tokenId] = _tokenURI;
-        tokenOwners[tokenId] = _owner;
+        userNFTIds[owner].push(tokenId);
+        tokenURIs[tokenId] = newTokenURI;
+        tokenOwners[tokenId] = owner;
+        // Store the tokenId in the allTokenIds array
+        allTokenIds.push(tokenId);
 
         // Emit the NFTMinted event
-        emit DataCreated(_owner, tokenId, _tokenURI);
+        emit DataCreated(owner, tokenId, newTokenURI);
 
         return tokenId;
     }
 
     // Function checks if NFT created
     function isNFTMinted(
-        uint256 _tokenId
+        uint256 tokenId
     ) external view returns (bool) {
-        return _exists(_tokenId);
+        return _exists(tokenId);
     }
 
     // Function checks NFT owners match
     function isNFTOwner(
-        address _user,
-        uint256 _tokenId
+        address user,
+        uint256 tokenId
     ) internal view returns (bool) {
-        return address(tokenOwners[_tokenId]) == _user;
+        return address(tokenOwners[tokenId]) == user;
     }
 
     // Function burns NFT
     function burnNFT(
-        uint256 _tokenId
+        uint256 tokenId
     ) external returns (bool){
         // Ensure only owner can burn NFT
-        require(isNFTOwner(msg.sender, _tokenId), "Not approved or owner");
+        require(isNFTOwner(msg.sender, tokenId), "Not approved or owner");
         // Update the token URI for the given NFT ID
-        _burn(_tokenId);
-        emit DataDeleted(msg.sender, _tokenId);
+        _burn(tokenId);
+        emit DataDeleted(msg.sender, tokenId);
         return true;
     }
 
     // Function transfers NFT ownership
     function transferNFT(
-        address _to,
-        uint256 _tokenId
+        address to,
+        uint256 tokenId
     ) external returns(bool){
         // Ensure only owner can transfer NFT 
-        require(isNFTOwner(msg.sender, _tokenId), "Not approved or owner");
+        require(isNFTOwner(msg.sender, tokenId), "Not approved or owner");
         // Update the token URI for the given NFT ID
-        _transfer(msg.sender,_to, _tokenId);
+        _transfer(msg.sender,to, tokenId);
         return true;
     }
 
     // Function updates NFT content
     function updateNFT(
-        uint256 _tokenId, 
-        string memory _newTokenURI
+        uint256 tokenId, 
+        string memory newTokenURI
     ) external returns(bool){
         // Ensure only owner can update NFT
-        require(isNFTOwner(msg.sender, _tokenId), "Not approved or owner");
+        require(isNFTOwner(msg.sender, tokenId), "Not approved or owner");
         // Update the token URI for the given NFT ID
-        require(bytes(_newTokenURI).length > 0, "String must be non-zero");
-        tokenURIs[_tokenId] = _newTokenURI;
+        require(bytes(newTokenURI).length > 0, "String must be non-zero");
+        tokenURIs[tokenId] = newTokenURI;
             
         // Emit the NFTRetrieved event
-        emit DataUpdated(msg.sender, _tokenId, _newTokenURI);
+        emit DataUpdated(msg.sender, tokenId, newTokenURI);
         return true;
     }
 
     // Function fetches NFT list for user
     function fetchUserTokens(
-        address _user
+        address user
     ) external view returns (uint256[] memory) {
-        return userNFTIds[_user];
+        return userNFTIds[user];
     }
 
     // Function fetches NFT content URI
     function fetchTokenURI(
-        uint256 _tokenId
+        uint256 tokenId
     ) external view returns (string memory) {
-        return tokenURIs[_tokenId];
+        return tokenURIs[tokenId];
     }
 
     // Function fetches NFT ownership
     function fetchNFTOwner(
-        uint256 _tokenId
+        uint256 newTokenId
     ) public view returns (address) {
-        return ownerOf(_tokenId);
+        return ownerOf(newTokenId);
+    }
+
+    function fetchAllTokenIds() external view returns (uint256[] memory) {
+        return allTokenIds;
     }
 
     // Override the _burn function to clear the token URI when an NFT is burned
@@ -145,9 +152,10 @@ contract WaterNFT is ERC721, ERC721URIStorage {
 
     // Override the tokenURI function
     function tokenURI(
-        uint256 _tokenId
+        uint256 newTokenId
     ) public view override(ERC721, ERC721URIStorage) returns (string memory) {
-        return super.tokenURI(_tokenId);
+        require(_exists(newTokenId), "Token ID does not exist!");
+        return super.tokenURI(newTokenId);
     }
 
     // Override the supportsInterface function

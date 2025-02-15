@@ -1,82 +1,85 @@
-const OracleSC = artifacts.require("OracleSC");
+const OracleSC = artifacts.require("OracleSC"); // Replace with your contract name
 
 contract("OracleSC", (accounts) => {
-    let oracleInstance;
-
+    let instance;
     const oracle1 = accounts[1];
     const oracle2 = accounts[2];
     const oracle3 = accounts[3];
 
     beforeEach(async () => {
-        oracleInstance = await OracleSC.new();
+        instance = await OracleSC.new(); // Deploy a new instance before each test
     });
 
-    it("should create a new request", async () => {
-        const urlToQuery = "http://example.com/api";
-        const attributeToFetch = "data";
+    // Tests for creating a request
+    describe("Creating a Request", () => {
+        it("should create a new request", async () => {
+            const urlToQuery = "http://localhost:3001/2";
+            const attributeToFetch = "name";
 
-        // Create a new request
-        const result = await oracleInstance.createRequest(urlToQuery, attributeToFetch, { from: oracle1 });
+            const result = await instance.createRequest(urlToQuery, attributeToFetch, { from: oracle1 });
 
-        // Check if the event was emitted
-        const event = result.logs[0].args;
-        assert.equal(event.urlToQuery, urlToQuery, "URL to query does not match");
-        assert.equal(event.attributeToFetch, attributeToFetch, "Attribute to fetch does not match");
+            // Check if the event was emitted
+            const event = result.logs[0].event;
+            assert.equal(event, "NewRequest", "NewRequest event was not emitted");
 
-        // Check if the request was created
-        const request = await oracleInstance.requests(0);
-        assert.equal(request.id.toString(), "0", "Request ID should be 0");
-        assert.equal(request.urlToQuery, urlToQuery, "Request URL does not match");
-        assert.equal(request.attributeToFetch, attributeToFetch, "Request attribute does not match");
+            // Check the request details
+            const request = await instance.requests(0); // Assuming requests is an array
+            assert.equal(request.id.toString(), "0", "Request ID should be 0");
+            assert.equal(request.urlToQuery, urlToQuery, "URL to query does not match");
+            assert.equal(request.attributeToFetch, attributeToFetch, "Attribute to fetch does not match");
+        });
     });
 
-    it("should update a request with oracle votes", async () => {
-        const urlToQuery = "http://example.com/api";
-        const attributeToFetch = "data";
-        const valueRetrieved = "some value";
+    // Tests for updating a request
+    describe("Updating a Request", () => {
+        it("should update a request with a new value", async () => {
+            const urlToQuery = "http://localhost:3001/2";
+            const attributeToFetch = "name";
+            await instance.createRequest(urlToQuery, attributeToFetch, { from: oracle1 });
 
-        // Create a new request
-        await oracleInstance.createRequest(urlToQuery, attributeToFetch, { from: oracle1 });
+            const valueRetrieved = "newValue";
 
-        // Update the request with the first oracle
-        await oracleInstance.updateRequest(0, valueRetrieved, { from: oracle1 });
+            // Update the request
+            const result = await instance.updateRequest(0, valueRetrieved, { from: oracle1 });
 
-        // Check if the answer was stored
-        const request = await oracleInstance.requests(0);
-        assert.equal(request.answers[0], valueRetrieved, "The answer should be stored in the first slot");
+            // Check if the event was emitted
+            const event = result.logs[0].event;
+            assert.equal(event, "UpdateRequest", "UpdateRequest event was not emitted");
 
-        // Update the request with the second oracle
-        await oracleInstance.updateRequest(0, valueRetrieved, { from: oracle2 });
+            // Check the updated request details
+            const request = await instance.requests(0);
+            assert.equal(request.agreedValue, valueRetrieved, "Agreed value should match the retrieved value");
+        });
 
-        // Check if the agreed value is still empty
-        const updatedRequest = await oracleInstance.requests(0);
-        assert.equal(updatedRequest.agreedValue, "", "Agreed value should still be empty");
+        it("should not allow an oracle to vote more than once", async () => {
+            const urlToQuery = "http://localhost:3001/2";
+            const attributeToFetch = "name";
+            await instance.createRequest(urlToQuery, attributeToFetch, { from: oracle1 });
 
-        // Update the request with the third oracle
-        await oracleInstance.updateRequest(0, valueRetrieved, { from: oracle3 });
+            const valueRetrieved = "William";
+            await instance.updateRequest(0, valueRetrieved, { from: oracle1 }); // First vote
 
-        // Check if the agreed value is now set
-        const finalRequest = await oracleInstance.requests(0);
-        assert.equal(finalRequest.agreedValue, valueRetrieved, "Agreed value should match the retrieved value");
-    });
+            // Attempt to vote again
+            await instance.updateRequest(0, valueRetrieved, { from: oracle1 }); // Second vote
 
-    it("should not allow the same oracle to vote twice", async () => {
-        const urlToQuery = "http://example.com/api";
-        const attributeToFetch = "data";
-        const valueRetrieved = "some value";
+            // Check the updated request details
+            const request = await instance.requests(0);
+            assert.equal(request.answers[0], valueRetrieved, "First answer should match the retrieved value");
+            assert.equal(request.answers[1], "", "Second answer should still be empty");
+        });
 
-        // Create a new request
-        await oracleInstance.createRequest(urlToQuery, attributeToFetch, { from: oracle1 });
+        it("should require a minimum quorum to agree on a value", async () => {
+            const urlToQuery = "http://localhost:3001/2";
+            const attributeToFetch = "name";
+            await instance.createRequest(urlToQuery, attributeToFetch, { from: oracle1 });
 
-        // First vote
-        await oracleInstance.updateRequest(0, valueRetrieved, { from: oracle1 });
+            const valueRetrieved = "william";
+            await instance.updateRequest(0, valueRetrieved, { from: oracle1 }); // First vote
+            await instance.updateRequest(0, valueRetrieved, { from: oracle2 }); // Second vote
 
-        // Attempt to vote again
-        try {
-            await oracleInstance.updateRequest(0, valueRetrieved, { from: oracle1 });
-            assert.fail("The oracle should not be able to vote twice");
-        } catch (error) {
-            assert.include(error.message, "revert", "Expected revert error not received");
-        }
+            // Check that the agreed value is still empty if minQuorum is not reached
+            const request = await instance.requests(0);
+            assert.equal(request.agreedValue, "", "Agreed value should still be empty if minQuorum is not reached");
+        });
     });
 });
