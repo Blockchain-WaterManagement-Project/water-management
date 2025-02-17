@@ -1,157 +1,222 @@
-html {
-  font-size: 10px;
-  font-family: sans-serif;
+html{
+    margin: 0;
+    background: var(--sColor);
+    color: var(--dColor);
+    --sColor: #261E35;
+    --aColor: #4DBBF6;
+    --bColor: #EC5EB7;
+    --cColor: #B783EB;
+    --dColor: #ffffff;
 }
 
-* {
-  margin: 0;
-  padding: 0;
+.container{
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
 }
 
-#App {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.6rem;
-  --primary-color: #1266cc;
-  --secondary-color: #f96400;
-  --flash-color: rgb(89, 255, 0);
-  --gray: #999;
-  --light-gray: #e0e0e0;
-  --dark-gray: #777;
+.content{
+    grid-column: span 9;
+}
+/* 
+ TOPBAR: Topbar stylesheet
+*/
+.topbar{
+    width: 100%;
+    height: 5rem;
+    overflow: hidden;
 }
 
-#App .container {
-  width: 100%;
-  min-width: 1080px;
-  max-width: 1280px;
-  height: 100%;
+.topbar-container{
+    width: 100%;
+    display: block;
+    position: relative;
 }
 
-code {
-  display: block;
-  white-space: pre-wrap;
-  padding: 1.2rem 2rem;
-  border-radius: 1rem;
-  background-color: var(--light-gray);
-  font-size: 1.4rem;
+.topbar-left{
+    top: 0;
+    left: 0;
+    position: absolute;
+    margin: .5rem auto;
 }
 
-code span {
-  transition: all 0.3s;
+.topbar-right{
+    top: 0;
+    right: 0;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .5rem;
 }
 
-code span.primary-color {
-  color: var(--primary-color);
+.topbar-avatar{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
 }
 
-code span.secondary-color {
-  color: var(--secondary-color);
+.logo{
+    font-size: larger;
+    font-weight: bolder;
+    font-style: italic;
 }
 
-code span.dim-color {
-  color: var(--gray);
+/* 
+BANNER: Banner stylesheet
+*/
+.banner{
+    width: 16rem;
+    height: 8rem;
+    box-shadow: 0 0 .3rem;
+    border-radius: .3rem;
+    margin: .5rem auto;
+    font-size: .5rem;
+    display: flex;
+    position: relative;
+    background: rgb(77,187,246);
+    background: linear-gradient(241deg, rgba(77,187,246,1) 0%, rgba(183,131,235,1) 42%, rgba(236,94,183,1) 100%);
 }
 
-code span.flash {
-  background-color: var(--flash-color);
+.banner-content{
+    flex: .6;
+    padding: .3rem .5rem;
 }
 
-details {
-  margin: 1.6rem 0;
-  padding: 0.5rem 2rem 0.5rem 0;
-  border: 1px solid var(--light-gray);
-  border-radius: 1rem;
+.banner-button{
+    border: none;
+    font-size: .5rem;
+    background: var(--bColor);
+    color: var(--dColor);
+    box-shadow: 0 0 .1rem #261E35;
+    border-radius: .2rem;
+    padding: .2rem .3rem;
 }
 
-details :not(summary, span) {
-  margin-left: 2.55rem;
+.banner-image{
+    flex: .3;
+    padding: 0;
+    position: relative;
 }
 
-details summary {
-  padding: 1.2rem;
-  cursor: pointer;
+.banner-icon{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
 }
 
-p,
-details code {
-  margin-top: 1rem;
-  margin-bottom: 1.4rem;
+/* 
+ FEATURES: Features stylesheet
+*/
+.feature{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+    flex-wrap: wrap;
 }
 
-p {
-  line-height: 2.6rem;
+.feature-item{
+    width: 10rem;
+    height: 3rem;
+    display: flex;
+    margin: .2rem auto;
+    box-shadow: 0 0 .1rem var(--bColor);
+    border-radius: .3rem;
+    position: relative;
 }
 
-p span.code {
-  font-family: monospace;
-  color: var(--gray);
+.item-icon{
+    flex: .3;
+    width: 100%;
+    height: 100%;
+    background: var(--bColor);
+    display: grid;
+    place-items: center;
 }
 
-hr {
-  margin: 4rem 0;
+.item-content{
+    flex: .7;
+    padding: .2rem .5rem;
 }
 
-#App .container .welcome h1 {
-  padding-top: 7.5rem;
-  font-size: 2.6rem;
+.icon-bg{
+    height: 100%;
 }
 
-#App .container .demo .contract-container {
-  display: flex;
+.feature-title{
+    font-size: .5rem;
+    opacity: .8;
 }
 
-#App .container .demo .contract-container code {
-  min-width: 42rem;
-  border-radius: 1rem 0 0 1rem;
+.feature-stats-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-#App .container .demo .contract-container .btns {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-  padding: 0 1rem;
-  background-color: var(--gray);
-  border-radius: 0 1rem 1rem 0;
+.feature-stats{
+    font-size: .8rem;
 }
 
-#App .container .demo .contract-container .btns > * {
-  width: 12rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem 0;
-  background-color: var(--light-gray);
-  border: none;
-  font-size: 1.2rem;
-  font-family: monospace;
-  cursor: pointer;
+.feature-stats-rate{
+    font-size: .5rem;
+    color: var(--aColor);
+    opacity: .8;
 }
 
-#App .container .demo .contract-container .btns > *:hover {
-  background-color: var(--dark-gray);
+.feature-icon{
+    color: var(--aColor);
+    font-size: .75rem;
 }
 
-#App .container .demo .contract-container .btns .input-btn input {
-  width: 4rem;
-  text-align: center;
-  font-family: monospace;
-  font-size: 1.2rem;
+.negative{
+    color: var(--bColor);
 }
 
-#App .container footer {
-  padding-bottom: 7.5rem;
+.feature-sub{
+    font-size: .7rem;
+    opacity: .4;
 }
 
-#App .container footer a {
-  display: inline-block;
-  margin: 2rem 1rem 0 0;
+/* 
+SIDEBAR: Sidebar Stylesheet
+*/
+.sidebar{
+    grid-column: span 3;
+    width: 200px;
+    height: calc(100vh - 5rem);
 }
 
-[contentEditable=true]:empty:not(:focus):before {
-  content: attr(data-text)
+.sidebar-container{
+    margin: .5rem .2rem;
 }
+
+.sidebar-menu{
+    list-style-type: none;
+}
+
+.sidebar-title{
+    opacity: .8;
+}
+
+.sidebar-list{
+    list-style-type: none;
+}
+
+.sidebar-item{
+    margin: .3rem auto;
+}
+
+.sidebar-icon{
+    margin: .3rem 1rem;
+}
+
+.icon-sup{
+    font-size: .55rem;
+    opacity: .55;
+}
+
+/* 
+
+*/
