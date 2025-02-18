@@ -1,4 +1,12 @@
-import { AddLink, ChangeCircle, ChatBubbleOutline, DynamicFeed, LineStyle, MailOutline, Report, Storefront, Timeline, TrendingUp, WorkOutline } from "@mui/icons-material";
+import { 
+    AddLink, 
+    ChangeCircle, 
+    LineStyle, 
+    Report, 
+    Storefront, 
+    Timeline, 
+    TrendingUp, 
+    WorkOutline } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
 function Sidebar(){

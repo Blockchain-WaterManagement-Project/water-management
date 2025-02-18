@@ -3,10 +3,12 @@ import Features from "./Features";
 import Banner from "./Banner.jsx";
 import { 
     riverData } from "../../utils/river.data.js";
-import Linechart from "./LineChart.jsx";
-import Barchart from "./Barchart.jsx";
-import Piechart from "./Piechart.jsx";
-import Areachart from "./Areachart.jsx";
+import { 
+    MyAreaChart, 
+    MyBarChart, 
+    MyLineChart,
+    MyPieChart,
+    MyRadarChart} from "./Chart.jsx";
 
 function Home(){
     return(
@@ -18,22 +20,20 @@ function Home(){
                 <div className="home-row home-banner">
                     <Banner
                         className="home-welcome"/>
-                    <Barchart 
-                        data={riverData}
-                        className="home-barchart"/>
+                    <MyRadarChart/>
                 </div>
                 <div className="home-row home-analytics">
-                    <Areachart data={riverData} />
+                    <MyAreaChart data={riverData} />
                 </div>
                 <div className="home-row home-report">
-                    <Linechart 
+                    <MyLineChart 
                         data={riverData}
                         className="home-linechart" />
-                    <Piechart dataset={riverData} />
+                    <MyPieChart />
                 </div>
             </div>
             <div className="home-transactions">
-                <Transaction/>
+                <MyBarChart />
             </div>
         </div>
     );

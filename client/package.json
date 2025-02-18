@@ -14,6 +14,8 @@
     "axios": "^1.7.9",
     "buffer": "^6.0.3",
     "css-loader": "^7.1.2",
+    "echarts": "^5.6.0",
+    "echarts-for-react": "^3.0.2",
     "file-loader": "^6.2.0",
     "i": "^0.3.7",
     "ipfs-http-client": "^60.0.1",
