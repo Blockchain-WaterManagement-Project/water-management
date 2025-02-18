@@ -161,7 +161,8 @@ export const userData = [
       "Active User": 3000,
     },
   ];
-  export const productData = [
+
+export const productData = [
     {
       name: "Jan",
       "Sales": 4000,
@@ -170,4 +171,4 @@ export const userData = [
       name: "Feb",
       "Sales": 3000,
     },
-  ];
+];

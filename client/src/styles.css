@@ -65,12 +65,12 @@ html{
 BANNER: Banner stylesheet
 */
 .banner{
-    width: 16rem;
-    height: 8rem;
+    width: 25rem;
+    height: 15rem;
     box-shadow: 0 0 .3rem;
     border-radius: .3rem;
     margin: .5rem auto;
-    font-size: .5rem;
+    font-size: 1rem;
     display: flex;
     position: relative;
     background: rgb(77,187,246);
@@ -84,12 +84,16 @@ BANNER: Banner stylesheet
 
 .banner-button{
     border: none;
-    font-size: .5rem;
-    background: var(--bColor);
+    font-size: .8rem;
+    background: var(--sColor);
     color: var(--dColor);
     box-shadow: 0 0 .1rem #261E35;
     border-radius: .2rem;
-    padding: .2rem .3rem;
+    padding: .3rem .8rem;
+}
+
+.banner-button:hover{
+    opacity: .8;
 }
 
 .banner-image{
@@ -110,20 +114,25 @@ BANNER: Banner stylesheet
 */
 .feature{
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     position: relative;
     flex-wrap: wrap;
 }
 
 .feature-item{
-    width: 10rem;
-    height: 3rem;
+    width: 15rem;
+    height: 5rem;
     display: flex;
-    margin: .2rem auto;
+    margin: .2rem .5rem;
     box-shadow: 0 0 .1rem var(--bColor);
     border-radius: .3rem;
     position: relative;
+}
+
+.feature-item:hover{
+    padding: -.3rem 1rem;
+    transform: scale(1.1);
 }
 
 .item-icon{
@@ -136,7 +145,7 @@ BANNER: Banner stylesheet
 }
 
 .item-content{
-    flex: .7;
+    flex: 1rem;
     padding: .2rem .5rem;
 }
 
@@ -145,7 +154,7 @@ BANNER: Banner stylesheet
 }
 
 .feature-title{
-    font-size: .5rem;
+    font-size: 1rem;
     opacity: .8;
 }
 
@@ -156,7 +165,11 @@ BANNER: Banner stylesheet
 }
 
 .feature-stats{
-    font-size: .8rem;
+    font-size: 1.35rem;
+    font-weight: 800;
+}
+.feature-stats:hover{
+    transform: scale(1.1);
 }
 
 .feature-stats-rate{
@@ -218,5 +231,43 @@ SIDEBAR: Sidebar Stylesheet
 }
 
 /* 
-
+HOME: Home stylesheet
 */
+.home{
+    width: '100%';
+    height: auto;
+    overflow-x: hidden;
+    transition: all 200ms;
+}
+.home-container{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+.home-row{
+    margin: .3rem auto;
+    padding: .7rem .5rem; 
+}
+.home-features{
+    gap: .5rem;
+}
+.home-banner{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+.home-welcome{
+    place-items: start;
+    height: 16rem;
+}
+.home-barchart{
+    place-items: end;
+    height: 16rem;
+}
+.home-analytics{
+    height: 8rem;
+}
+.home-report{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    height: 8rem;
+}
