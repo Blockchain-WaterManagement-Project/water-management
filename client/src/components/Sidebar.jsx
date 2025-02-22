@@ -1,11 +1,12 @@
 import { 
-    AddLink, 
     ChangeCircle, 
+    Home, 
     LineStyle, 
     Report, 
+    Share, 
     Storefront, 
     Timeline, 
-    TrendingUp, 
+    Wallet, 
     WorkOutline } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
@@ -18,19 +19,26 @@ function Sidebar(){
                         Dashboard
                     </h3>
                     <ul className="sidebar-list">
-                        <Link to="/" className="link"/>
-                        <li className="sidebar-item active">
-                            <LineStyle className="sidebar-icon" />
-                            Home
-                        </li>
-                        <li className="sidebar-item">
-                            <Timeline className="sidebar-icon" />
-                            Transactions
-                        </li>
-                        <li className="sidebar-item">
-                            <TrendingUp className="sidebar-icon" />
-                            Tokens
-                        </li>
+                        <Link to="/" className="link">
+                            <li className="sidebar-item active">
+                                <Home className="sidebar-icon" />
+                                <span>
+                                    Home
+                                </span>
+                            </li>
+                        </Link>
+                        <Link to="/wallet" className="link">
+                            <li className="sidebar-item">
+                                <Wallet className="sidebar-icon" />
+                                Wallet
+                            </li>
+                        </Link>
+                        <Link to="/transaction" className="link">
+                            <li className="sidebar-item">
+                                <Timeline className="sidebar-icon" />
+                                Transactions
+                            </li>
+                        </Link>
                     </ul>
                 </div>
                 <div className="sidebar-menu">
@@ -38,21 +46,24 @@ function Sidebar(){
                         Quick Menu
                     </h3>
                     <ul className="sidebar-list">
-                        <Link to="/users" className="link"/>
-                        <li className="sidebar-item">
-                            <Storefront className="sidebar-icon" />
-                            Marketplace
-                        </li>
-                        <Link to="/products" className="link"/>
-                        <li className="sidebar-item">
-                            <ChangeCircle className="sidebar-icon" />
-                            Traded <sup className="icon-sup">NFT</sup>
-                        </li>
-                        <Link to="/transactions" className="link"/>
-                        <li className="sidebar-item">
-                            <AddLink className="sidebar-icon" />
-                            Shared <sup className="icon-sup">NFT</sup>
-                        </li>
+                        <Link to="/marketplace" className="link">                 
+                            <li className="sidebar-item">
+                                <Storefront className="sidebar-icon" />
+                                Marketplace
+                            </li>
+                        </Link>
+                        <Link to="/trade" className="link">                 
+                            <li className="sidebar-item">
+                                <ChangeCircle className="sidebar-icon" />
+                                Trade
+                            </li>
+                        </Link>
+                        <Link to="/share" className="link">
+                            <li className="sidebar-item">
+                                <Share className="sidebar-icon" />
+                                Share 
+                            </li>
+                        </Link>
                     </ul>
                 </div>
                 {/* <div className="sidebar-menu">
@@ -79,18 +90,24 @@ function Sidebar(){
                         Staff
                     </h3>
                     <ul className="sidebar-list">
-                        <li className="sidebar-item">
-                            <WorkOutline className="sidebar-icon" />
-                            Manage
-                        </li>
-                        <li className="sidebar-item">
-                            <Timeline className="sidebar-icon" />
-                            Analytics
-                        </li>
-                        <li className="sidebar-item">
-                            <Report className="sidebar-icon" />
-                            Reports
-                        </li>
+                        <Link to="manage">                       
+                            <li className="sidebar-item">
+                                <WorkOutline className="sidebar-icon" />
+                                Manage
+                            </li>
+                        </Link>
+                        <Link to='/analytic'>
+                            <li className="sidebar-item">
+                                <Timeline className="sidebar-icon" />
+                                Analytics
+                            </li>
+                        </Link>
+                        <Link to="/report">                        
+                            <li className="sidebar-item">
+                                <Report className="sidebar-icon" />
+                                Reports
+                            </li>
+                        </Link>
                     </ul>
                 </div>
             </div>

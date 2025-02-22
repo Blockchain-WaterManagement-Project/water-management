@@ -2,39 +2,52 @@ import Transaction from "./Transaction";
 import Features from "./Features";
 import Banner from "./Banner.jsx";
 import { 
-    riverData } from "../../utils/river.data.js";
+    riverData,
+    nitrogenData,
+    ammoniumData, 
+    phosphorusData} from "../../utils/river.data.js";
 import { 
     MyAreaChart, 
-    MyBarChart, 
-    MyLineChart,
-    MyPieChart,
-    MyRadarChart} from "./Chart.jsx";
+    MyBarChart,
+    MyPolarChart,
+    MyRadarChart,
+    ConcentrationPieChart} from "./Chart.jsx";
 
 function Home(){
     return(
         <div className="home">
-            <div className="home-container">
-                <div className="home-row home-features">
-                    <Features />
-                </div>
-                <div className="home-row home-banner">
-                    <Banner
-                        className="home-welcome"/>
-                    <MyRadarChart/>
-                </div>
-                <div className="home-row home-analytics">
-                    <MyAreaChart data={riverData} />
-                </div>
-                <div className="home-row home-report">
-                    <MyLineChart 
-                        data={riverData}
-                        className="home-linechart" />
-                    <MyPieChart />
-                </div>
-            </div>
-            <div className="home-transactions">
-                <MyBarChart />
-            </div>
+            <div 
+                className="home-section section-menu">
+                    <Features/></div>
+            <div 
+                className="home-section section-banner">
+                    <Banner/></div>
+            <div 
+                className="home-section section-chartR">
+                 <MyRadarChart data={riverData}/> </div>
+            <div 
+                className="home-section section-chartA">
+                    <MyAreaChart 
+                        data1={nitrogenData}
+                        data2={ammoniumData} /></div>
+            <div 
+                className="home-section section-chartP">
+                    <MyPolarChart 
+                        data1={nitrogenData}
+                        data2={phosphorusData}
+                        data3={ammoniumData}/></div>
+            <div 
+                className="home-section section-chartB">
+                    <MyBarChart 
+                        data1={nitrogenData}
+                        data2={phosphorusData}/></div>
+            <div 
+                className="home-section section-chartL">
+                    <ConcentrationPieChart 
+                        data1={nitrogenData}
+                        data2={phosphorusData}
+                        data3={ammoniumData}/>
+                    </div>
         </div>
     );
 }

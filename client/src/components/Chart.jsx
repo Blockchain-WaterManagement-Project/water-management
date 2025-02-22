@@ -2,8 +2,8 @@ import { useEffect, useRef } from "react";
 import * as echarts from "echarts";
 import ReactEcharts from "echarts-for-react";
 
-export const MyBarChart = () => {
-    const option = {
+export const MyBarChart = ({ data1, data2}) => {
+    const option1 = {
         xAxis: {
             type: 'category',
             data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
@@ -21,6 +21,129 @@ export const MyBarChart = () => {
                 }
             }
         ]
+    };
+
+    const flowData = data1.map(item => item.FLOW_OUTcms);
+    const nitrogenLoadData = data1.map(item => item.Total_Nitrogen_Load);
+    const phosphorusLoadData = data2.map(item => item.Total_Phosphorus_Load);
+
+    const xAxisData = data1.map(item => item.RCH);
+
+const option = {
+//   title: {
+//     text: 'Nitrogen and Phosphorus Load with Flow',
+//   },
+  legend: {
+    data: ['Flow (cms)', 'Total Nitrogen Load (kg)', 'Total Phosphorus Load (kg)'],
+  },
+  toolbox: {
+    feature: {
+      magicType: {
+        type: ['stack']
+      },
+      dataView: {},
+      saveAsImage: {
+        pixelRatio: 2
+      }
+    }
+  },
+  tooltip: {},
+  xAxis: {
+    data: xAxisData,
+    splitLine: {
+      show: false
+    }
+  },
+  yAxis: {},
+  series: [
+    {
+      name: 'Flow (cms)',
+      type: 'bar',
+      data: flowData,
+      emphasis: {
+        focus: 'series'
+      },
+      animationDelay: function (idx) {
+        return idx * 10;
+      }
+    },
+    {
+        name: 'Total Nitrogen Load (kg)',
+        type: 'bar',
+        data: nitrogenLoadData,
+        emphasis: {
+            focus: 'series'
+        },
+        animationDelay: function (idx) {
+            return idx * 10 + 100;
+        }
+    },
+    {
+        name: 'Total Phosphorus Load (kg)',
+        type: 'bar',
+        data: phosphorusLoadData,
+        emphasis: {
+            focus: 'series'
+        },
+        animationDelay: function (idx) {
+            return idx * 10 + 200;
+        }
+    }
+],
+animationEasing: 'elasticOut',
+animationDelayUpdate: function (idx) {
+    return idx * 5;
+}
+};
+
+
+    return (
+        <ReactEcharts option={option} />
+    )
+}
+
+export const MyPolarChart = ({ data1, data2}) => {
+    const nitrogenLoadData = data1.map(item => item.Total_Nitrogen_Load);
+    
+    const phosphorusLoadData = data2.map(item => item.Total_Phosphorus_Load);
+
+
+    const xAxisData = data1.map(item => item.RCH);
+
+    const option = {
+        angleAxis: {},
+        radiusAxis: {
+            type: 'category',
+            data: xAxisData,
+            z: 10
+        },
+        polar: {},
+        series: [
+            {
+            type: 'bar',
+            data: nitrogenLoadData,
+            coordinateSystem: 'polar',
+            name: 'Nitrogen Load',
+            stack: 'a',
+            emphasis: {
+                focus: 'series'
+            }
+            },
+            {
+            type: 'bar',
+            data: phosphorusLoadData,
+            coordinateSystem: 'polar',
+            name: 'Phosphorus Load',
+            stack: 'a',
+            emphasis: {
+                focus: 'series'
+            }
+            }
+        ],
+        legend: {
+            show: true,
+            data: ['Nitrogen Load', 'Phosphorus Load']
+        }
     };
 
     return (
@@ -187,19 +310,24 @@ export const MyLineChart = () => {
 }
 
 
-export const MyAreaChart = () => {
+export const MyAreaChart = ({data1, data2}) => {
+    // data1 is nitrogen dataset
+    // data2 is ammonia dataset
+
     const chart = useRef(null);
     const instance = useRef(null);
+
+    const SubbasinID = data1.map(item => item.RCH);
+    const flowData = data1.map(item => item.FLOW_OUTcms);
+    const ammoniumDataForChart = data1.map(item => item.NH4_OUTkg);
+
     
     useEffect(()=>{
         // init new instance
         instance.current = echarts.init(chart.current);
 
         // define chart options
-        const option = {
-            title: {
-                text: 'Stacked Area Chart'
-            },
+        const option1 = {
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {
@@ -210,7 +338,13 @@ export const MyAreaChart = () => {
                 }
             },
             legend: {
-                data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
+                data:[
+                    'Area (sq units)',
+                    'Length (m)',
+                    'Slope',
+                    'Width (m)',
+                    'Depth (m)'
+                ]
             },
             toolbox: {
                 feature: {
@@ -293,6 +427,101 @@ export const MyAreaChart = () => {
             ]
         };
 
+        const option = {
+            title: {
+              text: 'Flow and Ammonium Output Relationship',
+              left: 'center'
+            },
+            grid: {
+              bottom: 80
+            },
+            toolbox: {
+              feature: {
+                dataZoom: {
+                  yAxisIndex: 'none'
+                },
+                restore: {},
+                saveAsImage: {}
+              }
+            },
+            tooltip: {
+              trigger: 'axis',
+              axisPointer: {
+                type: 'cross',
+                animation: false,
+                label: {
+                  backgroundColor: '#505765'
+                }
+              }
+            },
+            legend: {
+              data: ['Flow (cms)', 'Ammonium Output (kg)'],
+              left: 10
+            },
+            dataZoom: [
+              {
+                show: true,
+                realtime: true,
+                start: 0,
+                end: 100
+              },
+              {
+                type: 'inside',
+                realtime: true,
+                start: 0,
+                end: 100
+              }
+            ],
+            xAxis: [
+              {
+                type: 'category',
+                boundaryGap: false,
+                axisLine: { onZero: false },
+                data: SubbasinID
+              }
+            ],
+            yAxis: [
+              {
+                name: 'Flow (m³/s)',
+                type: 'value'
+              },
+              {
+                name: 'Ammonium Output (kg)',
+                nameLocation: 'start',
+                alignTicks: true,
+                type: 'value',
+                inverse: true
+              }
+            ],
+            series: [
+              {
+                name: 'Flow (cms)',
+                type: 'line',
+                areaStyle: {},
+                lineStyle: {
+                  width: 1
+                },
+                emphasis: {
+                  focus: 'series'
+                },
+                data: flowData
+              },
+              {
+                name: 'Ammonium Output (kg)',
+                type: 'line',
+                yAxisIndex: 1,
+                areaStyle: {},
+                lineStyle: {
+                  width: 1
+                },
+                emphasis: {
+                  focus: 'series'
+                },
+                data: ammoniumDataForChart
+              }
+            ]
+        };
+
         // apply option to chart
         instance.current.setOption(option);
 
@@ -303,14 +532,34 @@ export const MyAreaChart = () => {
     }, [chart])
 
     return (
-        <div ref={chart} style={{ width: '55rem', height:"15rem"}}></div>
+        <div 
+            ref={chart}
+            style={{ width: '100%', height:"15rem"}}></div>
     )
 }
 
 
-export const MyRadarChart = () => {
+export const MyRadarChart = ({data}) => {
     const chart = useRef(null);
     const instance = useRef(null);
+
+    const indicators = [
+        { text: 'Area (sq units)' },
+        { text: 'Length (m)' },
+        { text: 'Slope' },
+        { text: 'Width (m)' },
+        { text: 'Depth (m)' }
+    ];
+
+    const seriesData = data.map(data => ({
+        value: [
+            parseFloat(data.AreaC),
+            parseFloat(data.Len2),
+            parseFloat(data.Slo2),
+            parseFloat(data.Wid2),
+            parseFloat(data.Dep2)
+        ]
+    }));
 
     useEffect(()=>{
         // initialize a new chart
@@ -322,13 +571,7 @@ export const MyRadarChart = () => {
             legend: {},
             radar: [
                 {
-                    indicator: [
-                        { text: 'Indicator1' },
-                        { text: 'Indicator2' },
-                        { text: 'Indicator3' },
-                        { text: 'Indicator4' },
-                        { text: 'Indicator5' }
-                    ],
+                    indicator: indicators,
                     center: ['25%', '50%'],
                     radius: 120,
                     startAngle: 90,
@@ -357,14 +600,7 @@ export const MyRadarChart = () => {
                     }
                 },
                 {
-                    indicator: [
-                        { text: 'Indicator1', max: 150 },
-                        { text: 'Indicator2', max: 150 },
-                        { text: 'Indicator3', max: 150 },
-                        { text: 'Indicator4', max: 120 },
-                        { text: 'Indicator5', max: 108 },
-                        { text: 'Indicator6', max: 72 }
-                    ],
+                    indicator: indicators,
                     center: ['75%', '50%'],
                     radius: 120,
                     axisName: {
@@ -383,56 +619,12 @@ export const MyRadarChart = () => {
                             width: 4
                         }
                     },
-                    data: [
-                        {
-                            value: [100, 8, 0.4, -80, 2000],
-                            name: 'Data A'
-                        },
-                        {
-                            value: [60, 5, 0.3, -100, 1500],
-                            name: 'Data B',
-                            areaStyle: {
-                                color: 'rgba(255, 228, 52, 0.6)'
-                            }
-                        }
-                    ]
+                    data: seriesData
                 },
                 {
                     type: 'radar',
                     radarIndex: 1,
-                    data: [
-                        {
-                            value: [120, 118, 130, 100, 99, 70],
-                            name: 'Data C',
-                            symbol: 'rect',
-                            symbolSize: 12,
-                            lineStyle: {
-                                type: 'dashed'
-                            },
-                            label: {
-                                show: true,
-                                formatter: function (params) {
-                                    return params.value;
-                                }
-                            }
-                        },
-                        {
-                            value: [100, 93, 50, 90, 70, 60],
-                            name: 'Data D',
-                            areaStyle: {
-                                color: new echarts.graphic.RadialGradient(0.1, 0.6, 1, [
-                                    {
-                                        color: 'rgba(255, 145, 124, 0.1)',
-                                        offset: 0
-                                    },
-                                    {
-                                        color: 'rgba(255, 145, 124, 0.9)',
-                                        offset: 1
-                                    }
-                                ])
-                            }
-                        }
-                    ]
+                    data: seriesData
                 }
             ]
         };
@@ -445,7 +637,388 @@ export const MyRadarChart = () => {
             instance.current.dispose();
         }
     }, [chart])
+
     return (
-        <div ref={chart} style={{ width: '35rem', height: '15rem'}}></div>
+        <div 
+            ref={chart}
+            className="home-chartR" 
+            style={{ width: '100%', height: '100%'}}></div>
     )
 }
+
+export const AnalyticsRadarChart = ({ data1, data2 }) => {
+    // Prepare the series data for the radar chart
+    const nitrogenData = data1.map(item => ({
+        value: [
+            item.Total_Nitrogen_Load, 
+            item.Total_Nitrogen_Concentration,
+            item.FLOW_OUTcms, 
+            item.AREAkm2 
+        ]
+    }));
+
+    const phosphorusData = data2.map(item => ({
+        value: [
+            item.Total_Phosphorus_Load, 
+            item.Total_Phosphorus_Concentration,
+            item.FLOW_OUTcms, 
+            item.AREAkm2 
+        ]
+    }));
+
+// Function to prepare funnel data
+function prepareFunnelData(nitrogenData, phosphorusData) {
+    const funnelData = [];
+  
+    nitrogenData.forEach(item => {
+      funnelData.push({
+        value: item.Total_Nitrogen_Concentration,
+        name: `Nitrogen RCH ${item.RCH}`
+      });
+    });
+  
+    phosphorusData.forEach(item => {
+      funnelData.push({
+        value: item.Total_Phosphorus_Concentration,
+        name: `Phosphorus RCH ${item.RCH}`
+      });
+    });
+  
+    return funnelData;
+  }
+  
+  // Prepare the funnel data
+  const funnelData = prepareFunnelData(nitrogenData, phosphorusData);
+  
+  // Funnel chart option
+  const option = {
+    title: {
+      text: 'Funnel Chart for Nitrogen and Phosphorus Concentrations',
+      left: 'left',
+      top: 'bottom'
+    },
+    tooltip: {
+      trigger: 'item',
+      formatter: '{a} <br/>{b} : {c} mg/L'
+    },
+    toolbox: {
+      orient: 'vertical',
+      top: 'center',
+      feature: {
+        dataView: { readOnly: false },
+        restore: {},
+        saveAsImage: {}
+      }
+    },
+    legend: {
+      orient: 'vertical',
+      left: 'left',
+      data: funnelData.map(item => item.name)
+    },
+    series: [
+      {
+        name: 'Funnel',
+        type: 'funnel',
+        width: '40%',
+        height: '45%',
+        left: '5%',
+        top: '50%',
+        data: funnelData
+      },
+      {
+        name: 'Pyramid',
+        type: 'funnel',
+        width: '40%',
+        height: '45%',
+        left: '5%',
+        top: '5%',
+        sort: 'ascending',
+        data: funnelData
+      }
+    ]
+  };
+
+    return (
+        <ReactEcharts option={option} />
+    )
+}
+
+export const ConcentrationChart = ({ data, type }) => {
+  // Function to normalize data
+  const normalizeData = (data, maxValues) => {
+    return data.map(item => {
+      return {
+        RCH: item.RCH,
+        Total_Nitrogen_Concentration: (item.Total_Nitrogen_Concentration / maxValues.nitrogen) * 100,
+        Ammonia_Nitrogen_Concentration: (item.Ammonia_Nitrogen_Concentration / maxValues.ammonia) * 100,
+        Total_Phosphorus_Concentration: (item.Total_Phosphorus_Concentration / maxValues.phosphorus) * 100,
+      };
+    });
+  };
+
+  // Define maximum values for normalization
+  const maxValues = {
+    nitrogen: 20, // Example max value for Total Nitrogen Concentration
+    ammonia: 1,   // Example max value for Ammonia Nitrogen Concentration
+    phosphorus: 2, // Example max value for Total Phosphorus Concentration
+  };
+
+  // Function to visualize data based on type
+  const visualizeData = (data, type) => {
+    const normalizedData = normalizeData(data, maxValues);
+    const chartData = normalizedData.map(item => ({
+      name: `RCH ${item.RCH}`,
+      value: type === 'nitrogen' ? item.Total_Nitrogen_Concentration :
+             type === 'ammonia' ? item.Ammonia_Nitrogen_Concentration :
+             item.Total_Phosphorus_Concentration
+    }));
+
+    // ECharts configuration
+    const option = {
+      title: {
+        text: `${type.charAt(0).toUpperCase() + type.slice(1)} Concentration (Normalized)`,
+        left: 'center',
+        textStyle: {
+          color: '#FFFFFF' // Set title color to white
+        }
+      },
+      tooltip: {
+        trigger: 'axis',
+        formatter: '{b}: {c} %'
+      },
+      xAxis: {
+        type: 'category',
+        data: chartData.map(item => item.name) // Use the names for the x-axis
+      },
+      yAxis: {
+        type: 'value',
+        name: 'Concentration (%)',
+        min: 0,
+        max: 100 // Normalized values will be between 0 and 100
+      },
+      series: [
+        {
+          name: `${type.charAt(0).toUpperCase() + type.slice(1)} Concentration`,
+          type: 'bar',
+          data: chartData.map(item => item.value),
+          itemStyle: {
+            color: type === 'nitrogen' ? '#67F9D8' : type === 'ammonia' ? '#FF917C' : '#FFE434'
+          }
+        }
+      ]
+    };
+
+    return option;
+  };
+
+  // Determine the type of concentration based on the dataset structure
+  let selectedType;
+  if (data[0].Total_Nitrogen_Concentration !== undefined) {
+    selectedType = 'nitrogen';
+  } else if (data[0].Ammonia_Nitrogen_Concentration !== undefined) {
+    selectedType = 'ammonia';
+  } else if (data[0].Total_Phosphorus_Concentration !== undefined) {
+    selectedType = 'phosphorus';
+  } else {
+    throw new Error('Invalid data structure');
+  }
+
+  const option = visualizeData(data, selectedType);
+
+  return (
+    <ReactEcharts option={option} />
+  );
+};
+
+export const ConcentrationPieChart = ({ data1, data2, data3 }) => {
+  // Function to calculate total concentrations
+  const calculateTotalConcentrations = (data1, data2, data3) => {
+    const totalNitrogen = data1.reduce((acc, item) => acc + item.Total_Nitrogen_Concentration, 0);
+    const totalPhosphorus = data2.reduce((acc, item) => acc + item.Total_Phosphorus_Concentration, 0);
+    const totalAmmonia = data3.reduce((acc, item) => acc + item.Ammonia_Nitrogen_Concentration, 0);
+
+    return [
+      { value: totalNitrogen, name: 'Total Nitrogen' },
+      { value: totalAmmonia, name: 'Total Ammonia' },
+      { value: totalPhosphorus, name: 'Total Phosphorus' }
+    ];
+  };
+
+  // Create pie chart option
+  const createPieChartOption = () => {
+    const pieData = calculateTotalConcentrations(data1, data2, data3);
+
+    const option = {
+      tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b}: {c} ({d}%)'
+      },
+    //   legend: {
+    //     orient: 'vertical',
+    //     left: 'left',
+    //     data: pieData.map(item => item.name)
+    //   },
+      series: [
+        {
+          name: 'Concentration Sources',
+          type: 'pie',
+          selectedMode: 'single',
+          radius: [0, '30%'],
+          label: {
+            position: 'inner',
+            fontSize: 14
+          },
+          labelLine: {
+            show: false
+          },
+          data: pieData.map(item => ({
+            value: item.value,
+            name: item.name,
+            selected: item.name === 'Total Nitrogen' // Example of selecting one by default
+          }))
+        },
+        {
+          name: 'Concentration Sources',
+          type: 'pie',
+          radius: ['45%', '60%'],
+          labelLine: {
+            length: 30
+          },
+          label: {
+            formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
+            backgroundColor: '#F6F8FC',
+            borderColor: '#8C8D8E',
+            borderWidth: 1,
+            borderRadius: 4,
+            rich: {
+              a: {
+                color: '#6E7079',
+                lineHeight: 22,
+                align: 'center'
+              },
+              hr: {
+                borderColor: '#8C8D8E',
+                width: '100%',
+                borderWidth: 1,
+                height: 0
+              },
+              b: {
+                color: '#4C5058',
+                fontSize: 14,
+                fontWeight: 'bold',
+                lineHeight: 33
+              },
+              per: {
+                color: '#fff',
+                backgroundColor: '#4C5058',
+                padding: [3, 4],
+                borderRadius: 4
+              }
+            }
+          },
+          data: pieData
+        }
+      ]
+    };
+
+    return option;
+  };
+
+  const option = createPieChartOption();
+
+  return (
+    <ReactEcharts option={option} />
+  );
+};
+
+export const ConcentrationGaugeChart = ({ data1, data2, data3 }) => {
+  // Function to calculate total concentrations
+  const calculateTotalConcentrations = (data1, data2, data3) => {
+    const totalNitrogen = data1.reduce((acc, item) => acc + item.Total_Nitrogen_Concentration, 0);
+    const totalPhosphorus = data2.reduce((acc, item) => acc + item.Total_Phosphorus_Concentration, 0);
+    const totalAmmonia = data3.reduce((acc, item) => acc + item.Ammonia_Nitrogen_Concentration, 0);
+
+    return [
+      { value: totalNitrogen, name: 'Total Nitrogen' },
+      { value: totalAmmonia, name: 'Total Ammonia' },
+      { value: totalPhosphorus, name: 'Total Phosphorus' }
+    ];
+  };
+
+  // Create gauge chart option
+  const createGaugeChartOption = () => {
+    const gaugeData = calculateTotalConcentrations(data1, data2, data3);
+
+    const option = {
+      series: [
+        {
+          type: 'gauge',
+          startAngle: 90,
+          endAngle: -270,
+          pointer: {
+            show: false
+          },
+          progress: {
+            show: true,
+            overlap: false,
+            roundCap: true,
+            clip: false,
+            itemStyle: {
+              borderWidth: 1,
+              borderColor: '#464646'
+            }
+          },
+          axisLine: {
+            lineStyle: {
+              width: 40
+            }
+          },
+          splitLine: {
+            show: false,
+            distance: 0,
+            length: 10
+          },
+          axisTick: {
+            show: false
+          },
+          axisLabel: {
+            show: false,
+            distance: 50
+          },
+          data: gaugeData.map((item, index) => ({
+            value: item.value,
+            name: item.name,
+            title: {
+              offsetCenter: ['0%', `${index * 30 - 30}%`] // Adjust position based on index
+            },
+            detail: {
+              valueAnimation: true,
+              offsetCenter: ['0%', `${index * 30 - 20}%`] // Adjust position based on index
+            }
+          })),
+          title: {
+            fontSize: 14
+          },
+          detail: {
+            width: 50,
+            height: 14,
+            fontSize: 14,
+            color: 'inherit',
+            borderColor: 'inherit',
+            borderRadius: 20,
+            borderWidth: 1,
+            formatter: '{value}%'
+          }
+        }
+      ]
+    };
+
+    return option;
+  };
+
+  const option = createGaugeChartOption();
+
+  return (
+    <ReactEcharts option={option} />
+  );
+};

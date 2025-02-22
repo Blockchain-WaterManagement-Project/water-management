@@ -2,7 +2,7 @@ import BannerIMG from "./../assets/banner.png";
 
 function Banner(){
     return(
-        <div className="banner">
+        <div className="banner home-banner">
             <div className="banner-content">
                 <p className="banner-subtitle">
                     HydroExchange</p>
