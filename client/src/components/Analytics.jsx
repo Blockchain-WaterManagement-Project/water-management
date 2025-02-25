@@ -2,7 +2,10 @@ import { AnalyticsRadarChart, ConcentrationChart } from "./Chart";
 import { 
     ammoniumData,
     nitrogenData, 
-    phosphorusData } from "../../utils/river.data";
+    phosphorusData, 
+    tokenData, 
+    transactionData} from "../../utils/river.data";
+import { TokenTable, TransactionTable } from "./Table";
 
 function Analytics(){
     return(
@@ -25,9 +28,9 @@ function Analytics(){
                     data={ammoniumData}
                     type='ammonia'/>
             </div>
-            <div className="analytics-section">2</div>
-            <div className="analytics-section">3</div>
-            <div className="analytics-section">4</div>
+            <div className="analytics-section section-transaction">
+                <TransactionTable dataset={transactionData}/>
+            </div>
         </div>
     )
 }

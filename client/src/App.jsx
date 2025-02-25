@@ -3,7 +3,14 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Topbar from "./components/Topbar";
 import Sidebar from "./components/Sidebar";
 import Home from "./components/Home";
-import Analytics from "./components/Analytics";
+import Trade from "./components/Trade";
+import Marketplace from "./components/pages/Marketplace";
+import Transaction from "./components/Transaction";
+import Analytics from "./components/pages/Analytics";
+import Account from "./components/pages/Account";
+import { nftData, tradeData } from "../utils/river.data";
+import Manage from "./components/pages/Manage";
+import Report from "./components/pages/Report";
 
 function App() {
   return (
@@ -17,23 +24,19 @@ function App() {
             <Route path="/" element={<Home/>} />
             <Route path="/users" element={<h1>
                 List of Users</h1>} />
-            <Route path="/wallet" element={<h1>
-                List of Product</h1>} />
-            <Route path="/transaction" element={<h1>
-                Product (NFT)</h1>} />
-            <Route path="/marketplace" element={<h1>
-                New Product</h1>} />
-            <Route path="/marketplace" element={<h1>
-                New Product</h1>} />
-            <Route path="/trade" element={<h1>
-                New Product</h1>} />
+            <Route path="/wallet" element={<Account/>} />
+
+            <Route path="/transaction" element={<Transaction/>} />
+
+            <Route path="/marketplace" element={<Marketplace dataset={nftData}/>} />
+
+            <Route path="/trade" element={<Trade dataset={tradeData}/>} />
+
             <Route path="/share" element={<h1>
                 New Product</h1>} />
-            <Route path="/manage" element={<h1>
-                Manage Page</h1>} />
+            <Route path="/manage" element={<Manage/>} />
             <Route path="/analytic" element={<Analytics/>} />
-            <Route path="/report" element={<h1>
-                Report Page</h1>} />
+            <Route path="/report" element={<Report/>} />
           </Routes>
         </div>
       </div>

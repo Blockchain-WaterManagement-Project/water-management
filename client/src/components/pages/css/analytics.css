@@ -1,0 +1,13 @@
+.analytics-wrapper{
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    position: relative;
+}
+.analytics-sidebar{
+    grid-column-start: 1;
+    grid-column-end: 4;
+}
+.analytics-content{
+    grid-column-start: 4;
+    grid-column-end: 13;
+}

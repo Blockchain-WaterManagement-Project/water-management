@@ -6399,7 +6399,110 @@ export const phosphorusData = [
       K: 0.075,
     },
 ];
-  
+
+export const transactionData = [
+  {
+      "transaction_hash": "0x1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9",
+      "block_number": 12345678,
+      "from_address": "0x3f243FdacE01Cfd9719f7359c94BA11361f32471",
+      "to_address": "0x86Fa049857E0209aa7D9e616F7eb3b3B78ECfdb0",
+      "value": 1.5,
+      "gas_used": 21000,
+      "timestamp": "2025-02-23T10:00:00",
+      "status": "Success"
+  },
+  {
+      "transaction_hash": "0x2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0",
+      "block_number": 12345679,
+      "from_address": "0x3f243FdacE01Cfd9719f7359c94BA11361f32471",
+      "to_address": "0x86Fa049857E0209aa7D9e616F7eb3b3B78ECfdb0",
+      "value": 0.75,
+      "gas_used": 21000,
+      "timestamp": "2025-02-23T10:05:00",
+      "status": "Success"
+  },
+  {
+      "transaction_hash": "0x3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t1",
+      "block_number": 12345680,
+      "from_address": "0x3f243FdacE01Cfd9719f7359c94BA11361f32471",
+      "to_address": "0x86Fa049857E0209aa7D9e616F7eb3b3B78ECfdb0",
+      "value": 2.0,
+      "gas_used": 21000,
+      "timestamp": "2025-02-23T10:10:00",
+      "status": "Success"
+  },
+  {
+      "transaction_hash": "0x4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t1u2",
+      "block_number": 12345681,
+      "from_address": "0x3f243FdacE01Cfd9719f7359c94BA11361f32471",
+      "to_address": "0x86Fa049857E0209aa7D9e616F7eb3b3B78ECfdb0",
+      "value": 0.5,
+      "gas_used": 21000,
+      "timestamp": "2025-02-23T10:15:00",
+      "status": "Success"
+  },
+  {
+      "transaction_hash": "0x5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t1u2v3",
+      "block_number": 12345682,
+      "from_address": "0x3f243FdacE01Cfd9719f7359c94BA11361f32471",
+      "to_address": "0x86Fa049857E0209aa7D9e616F7eb3b3B78ECfdb0",
+      "value": 1.2,
+      "gas_used": 21000,
+      "timestamp": "2025-02-23T10:20:00",
+      "status": "Success"
+  },
+  {
+      "transaction_hash": "0x6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t1u2v3w4",
+      "block_number": 12345683,
+      "from_address": "0x3f243FdacE01Cfd9719f7359c94BA11361f32471",
+      "to_address": "0x86Fa049857E0209aa7D9e616F7eb3b3B78ECfdb0",
+      "value": 0.3,
+      "gas_used": 21000,
+      "timestamp": "2025-02-23T10:25:00",
+      "status": "Success"
+  },
+  {
+      "transaction_hash": "0x7g8h9i0j1k2l3m4n5o6p7q8r9s0t1u2v3w4x5",
+      "block_number": 12345684,
+      "from_address": "0x3f243FdacE01Cfd9719f7359c94BA11361f32471",
+      "to_address": "0x86Fa049857E0209aa7D9e616F7eb3b3B78ECfdb0",
+      "value": 0.9,
+      "gas_used": 21000,
+      "timestamp": "2025-02-23T10:30:00",
+      "status": "Success"
+  },
+  {
+      "transaction_hash": "0x8h9i0j1k2l3m4n5o6p7q8r9s0t1u2v3w4x5y6",
+      "block_number": 12345685,
+      "from_address": "0x3f243FdacE01Cfd9719f7359c94BA11361f32471",
+      "to_address": "0x86Fa049857E0209aa7D9e616F7eb3b3B78ECfdb0",
+      "value": 1.8,
+      "gas_used": 21000,
+      "timestamp": "2025-02-23T10:35:00",
+      "status": "Success"
+  },
+  {
+      "transaction_hash": "0x9i0j1k2l3m4n5o6p7q8r9s0t1u2v3w4x5y6z7",
+      "block_number": 12345686,
+      "from_address": "0x3f243FdacE01Cfd9719f7359c94BA11361f32471",
+      "to_address": "0x86Fa049857E0209aa7D9e616F7eb3b3B78ECfdb0",
+      "value": 0.6,
+      "gas_used": 21000,
+      "timestamp": "2025-02-23T10:40:00",
+      "status": "Success"
+  },
+  {
+      "transaction_hash": "0x0j1k2l3m4n5o6p7q8r9s0t1u2v3w4x5y6z7a8",
+      "block_number": 12345687,
+      "from_address": "0x3f243FdacE01Cfd9719f7359c94BA11361f32471",
+      "to_address": "0x86Fa049857E0209aa7D9e616F7eb3b3B78ECfdb0",
+      "value": 1.1,
+      "gas_used": 21000,
+      "timestamp": "2025-02-23T10:45:00",
+      "status": "Success"
+  }
+]
+
 export const userData = [
     {
       name: "Jan",
@@ -6421,3 +6524,284 @@ export const productData = [
       "Sales": 3000,
     },
 ];
+
+export const tokenData = [
+  {
+      "nft_id": 1,
+      "water_source": "River A",
+      "quality_index": 85,
+      "ph_level": 7.2,
+      "contaminants_mg_per_L": 0.5,
+      "timestamp": "2025-02-23T10:00:00",
+      "nft_price_eth": 0.5,
+      "owner_address": "0x1234567890abcdef1234567890abcdef"
+  },
+  {
+      "nft_id": 2,
+      "water_source": "Lake B",
+      "quality_index": 90,
+      "ph_level": 6.8,
+      "contaminants_mg_per_L": 0.2,
+      "timestamp": "2025-02-23T11:00:00",
+      "nft_price_eth": 0.7,
+      "owner_address": "0xabcdef1234567890abcdef1234567890"
+  },
+  {
+      "nft_id": 3,
+      "water_source": "Well C",
+      "quality_index": 75,
+      "ph_level": 7.5,
+      "contaminants_mg_per_L": 1.0,
+      "timestamp": "2025-02-23T12:00:00",
+      "nft_price_eth": 0.4,
+      "owner_address": "0x7890abcdef1234567890abcdef123456"
+  },
+  {
+      "nft_id": 4,
+      "water_source": "Ocean D",
+      "quality_index": 92,
+      "ph_level": 8.0,
+      "contaminants_mg_per_L": 0.1,
+      "timestamp": "2025-02-23T13:00:00",
+      "nft_price_eth": 1.0,
+      "owner_address": "0x4567890abcdef1234567890abcdef123"
+  },
+  {
+      "nft_id": 5,
+      "water_source": "Pond E",
+      "quality_index": 80,
+      "ph_level": 7.0,
+      "contaminants_mg_per_L": 0.3,
+      "timestamp": "2025-02-23T14:00:00",
+      "nft_price_eth": 0.6,
+      "owner_address": "0xabcdef1234567890abcdef1234567890"
+  },
+  {
+      "nft_id": 6,
+      "water_source": "River F",
+      "quality_index": 88,
+      "ph_level": 7.3,
+      "contaminants_mg_per_L": 0.4,
+      "timestamp": "2025-02-23T15:00:00",
+      "nft_price_eth": 0.8,
+      "owner_address": "0x1234567890abcdefabcdef1234567890"
+  },
+  {
+      "nft_id": 7,
+      "water_source": "Lake G",
+      "quality_index": 95,
+      "ph_level": 6.9,
+      "contaminants_mg_per_L": 0.2,
+      "timestamp": "2025-02-23T16:00:00",
+      "nft_price_eth": 1.2,
+      "owner_address": "0xabcdef1234567890abcdefabcdef1234"
+  },
+  {
+      "nft_id": 8,
+      "water_source": "Well H",
+      "quality_index": 70,
+      "ph_level": 7.4,
+      "contaminants_mg_per_L": 1.5,
+      "timestamp": "2025-02-23T17:00:00",
+      "nft_price_eth": 0.3,
+      "owner_address": "0x7890abcdef123456abcdef1234567890"
+  },
+  {
+      "nft_id": 9,
+      "water_source": "Ocean I",
+      "quality_index": 91,
+      "ph_level": 8.1,
+      "contaminants_mg_per_L": 0.0,
+      "timestamp": "2025-02-23T18:00:00",
+      "nft_price_eth": 1.5,
+      "owner_address": "0x4567890abcdef123456abcdef1234567"
+  }
+]
+
+export const tradeData = [
+  {
+      "trade_id": 1,
+      "nft_id": 101,
+      "buyer_address": "0x1234567890abcdef1234567890abcdef12345678",
+      "seller_address": "0xabcdef1234567890abcdef1234567890abcdef12",
+      "trade_price_eth": 0.5,
+      "trade_timestamp": "2025-02-23T10:00:00Z",
+      "transaction_hash": "0x1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9"
+  },
+  {
+      "trade_id": 2,
+      "nft_id": 102,
+      "buyer_address": "0xabcdef1234567890abcdef1234567890abcdef12",
+      "seller_address": "0x1234567890abcdef1234567890abcdef12345678",
+      "trade_price_eth": 0.7,
+      "trade_timestamp": "2025-02-23T11:00:00Z",
+      "transaction_hash": "0x2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0"
+  },
+  {
+      "trade_id": 3,
+      "nft_id": 103,
+      "buyer_address": "0x7890abcdef1234567890abcdef1234567890abcd",
+      "seller_address": "0xabcdef1234567890abcdef1234567890abcdef12",
+      "trade_price_eth": 0.4,
+      "trade_timestamp": "2025-02-23T12:00:00Z",
+      "transaction_hash": "0x3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t1"
+  },
+  {
+      "trade_id": 4,
+      "nft_id": 104,
+      "buyer_address": "0x4567890abcdef1234567890abcdef1234567890",
+      "seller_address": "0x1234567890abcdef1234567890abcdef12345678",
+      "trade_price_eth": 1.0,
+      "trade_timestamp": "2025-02-23T13:00:00Z",
+      "transaction_hash": "0x4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t1u2"
+  },
+  {
+      "trade_id": 5,
+      "nft_id": 105,
+      "buyer_address": "0xabcdef1234567890abcdef1234567890abcdef12",
+      "seller_address": "0x7890abcdef1234567890abcdef1234567890abcd",
+      "trade_price_eth": 0.6,
+      "trade_timestamp": "2025-02-23T14:00:00Z",
+      "transaction_hash": "0x5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t1u2v3"
+  },
+  {
+      "trade_id": 6,
+      "nft_id": 106,
+      "buyer_address": "0x1234567890abcdef1234567890abcdef12345678",
+      "seller_address": "0x4567890abcdef1234567890abcdef1234567890",
+      "trade_price_eth": 0.8,
+      "trade_timestamp": "2025-02-23T15:00:00Z",
+      "transaction_hash": "0x6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t1u2v3w4"
+  },
+  {
+      "trade_id": 7,
+      "nft_id": 107,
+      "buyer_address": "0x7890abcdef1234567890abcdef1234567890abcd",
+      "seller_address": "0xabcdef1234567890abcdef1234567890abcdef12",
+      "trade_price_eth": 1.2,
+      "trade_timestamp": "2025-02-23T16:00:00Z",
+      "transaction_hash": "0x7g8h9i0j1k2l3m4n5o6p7q8r9s0t1u2v3w4x5"
+  },
+  {
+      "trade_id": 8,
+      "nft_id": 108,
+      "buyer_address": "0xabcdef1234567890abcdef1234567890abcdef12",
+      "seller_address": "0x1234567890abcdef1234567890abcdef12345678",
+      "trade_price_eth": 0.3,
+      "trade_timestamp": "2025-02-23T17:00:00Z",
+      "transaction_hash": "0x8h9i0j1k2l3m4n5o6p7q8r9s0t1u2v3w4x5y6"
+  }
+]
+
+export const nftData = [
+    {
+      "nftId": "NFT001",
+      "name": "Los Angeles River Water Quality",
+      "description": "Water quality data for the Los Angeles River collected on October 1, 2023.",
+      "data": {
+        "location": {
+          "latitude": 34.0522,
+          "longitude": -118.2437,
+          "description": "Los Angeles River"
+        },
+        "parameters": {
+          "pH": 7.2,
+          "dissolvedOxygen": 8.5,
+          "turbidity": 5.0,
+          "nitrate": 1.2,
+          "phosphate": 0.3
+        },
+        "timestamp": "2023-10-01T10:00:00Z",
+        "collector": "Water Quality Monitoring Station A"
+      },
+      "owner": "0x1234567890abcdef1234567890abcdef12345678"
+    },
+    {
+      "nftId": "NFT002",
+      "name": "Hudson River Water Quality",
+      "description": "Water quality data for the Hudson River collected on October 1, 2023.",
+      "data": {
+        "location": {
+          "latitude": 40.7128,
+          "longitude": -74.0060,
+          "description": "Hudson River"
+        },
+        "parameters": {
+          "pH": 6.8,
+          "dissolvedOxygen": 7.0,
+          "turbidity": 10.0,
+          "nitrate": 0.5,
+          "phosphate": 0.1
+        },
+        "timestamp": "2023-10-01T11:00:00Z",
+        "collector": "Water Quality Monitoring Station B"
+      },
+      "owner": "0xabcdef1234567890abcdef1234567890abcdef12"
+    },
+    {
+      "nftId": "NFT003",
+      "name": "San Francisco Bay Water Quality",
+      "description": "Water quality data for San Francisco Bay collected on October 1, 2023.",
+      "data": {
+        "location": {
+          "latitude": 37.7749,
+          "longitude": -122.4194,
+          "description": "San Francisco Bay"
+        },
+        "parameters": {
+          "pH": 7.5,
+          "dissolvedOxygen": 9.0,
+          "turbidity": 3.0,
+          "nitrate": 0.8,
+          "phosphate": 0.2
+        },
+        "timestamp": "2023-10-01T12:00:00Z",
+        "collector": "Water Quality Monitoring Station C"
+      },
+      "owner": "0x7890abcdef1234567890abcdef1234567890abcd"
+    },
+    {
+      "nftId": "NFT004",
+      "name": "Miami River Water Quality",
+      "description": "Water quality data for the Miami River collected on October 1, 2023.",
+      "data": {
+        "location": {
+          "latitude": 25.7617,
+          "longitude": -80.1918,
+          "description": "Miami River"
+        },
+        "parameters": {
+          "pH": 7.0,
+          "dissolvedOxygen": 6.5,
+          "turbidity": 15.0,
+          "nitrate": 1.0,
+          "phosphate": 0.4
+        },
+        "timestamp": "2023-10-01T13:00:00Z",
+        "collector": "Water Quality Monitoring Station D"
+      },
+      "owner": "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd"
+    },
+    {
+      "nftId": "NFT005",
+      "name": "Lake Michigan Water Quality",
+      "description": "Water quality data for Lake Michigan collected on October 1, 2023.",
+      "data": {
+        "location": {
+          "latitude": 41.8781,
+          "longitude": -87.6298,
+          "description": "Lake Michigan"
+        },
+        "parameters": {
+          "pH": 7.3,
+          "dissolvedOxygen": 8.0,
+          "turbidity": 4.0,
+          "nitrate": 0.6,
+          "phosphate": 0.3
+        },
+        "timestamp": "2023-10-01T14:00:00Z",
+        "collector": "Water Quality Monitoring Station D"
+      },
+      "owner": "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd"
+    }
+]

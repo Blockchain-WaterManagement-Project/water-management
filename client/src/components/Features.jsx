@@ -16,7 +16,7 @@ function Features(){
                     </div>
                     <div className="item-content">
                         <span className="feature-title">
-                            Owned Tokens
+                            Total NFTs Created
                         </span>
                         <div className="feature-stats-container">
                             <span className="feature-stats">
@@ -34,7 +34,7 @@ function Features(){
                     </div>
                     <div className="item-content">
                         <span className="feature-title">
-                            Shared Tokens
+                            Total NFTs Shared
                         </span>
                         <div className="feature-stats-container">
                             <span className="feature-stats">
@@ -52,7 +52,7 @@ function Features(){
                     </div>
                     <div className="item-content">  
                         <span className="feature-title">
-                            Traded Tokens
+                            Total NFTs Traded
                         </span>
                         <div className="feature-stats-container">
                             <span className="feature-stats">
@@ -70,7 +70,7 @@ function Features(){
                     </div>
                     <div className="item-content">
                         <span className="feature-title">
-                            Transactions
+                            Total Transactions
                         </span>
                         <div className="feature-stats-container">
                             <span className="feature-stats">

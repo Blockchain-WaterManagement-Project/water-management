@@ -35,6 +35,9 @@ const option = {
 //   },
   legend: {
     data: ['Flow (cms)', 'Total Nitrogen Load (kg)', 'Total Phosphorus Load (kg)'],
+    textStyle: {
+      color: '#fff'
+    }
   },
   toolbox: {
     feature: {
@@ -70,6 +73,9 @@ const option = {
     {
         name: 'Total Nitrogen Load (kg)',
         type: 'bar',
+        textStyle: {
+          color: '#fff'
+        },
         data: nitrogenLoadData,
         emphasis: {
             focus: 'series'
@@ -142,7 +148,10 @@ export const MyPolarChart = ({ data1, data2}) => {
         ],
         legend: {
             show: true,
-            data: ['Nitrogen Load', 'Phosphorus Load']
+            data: ['Nitrogen Load', 'Phosphorus Load'],
+            textStyle: {
+              color: '#fff'
+            }
         }
     };
 
@@ -428,10 +437,13 @@ export const MyAreaChart = ({data1, data2}) => {
         };
 
         const option = {
-            title: {
-              text: 'Flow and Ammonium Output Relationship',
-              left: 'center'
-            },
+            // title: {
+            //   text: 'Ammonium Flow & Output Relationship',
+            //   left: 'center',
+            //   textStyle: {
+            //     color: '#fff' // Set the legend text color to red
+            //   }
+            // },
             grid: {
               bottom: 80
             },
@@ -456,7 +468,10 @@ export const MyAreaChart = ({data1, data2}) => {
             },
             legend: {
               data: ['Flow (cms)', 'Ammonium Output (kg)'],
-              left: 10
+              left: 10,
+              textStyle: {
+                color: '#fff'
+              }
             },
             dataZoom: [
               {
@@ -483,7 +498,7 @@ export const MyAreaChart = ({data1, data2}) => {
             yAxis: [
               {
                 name: 'Flow (m³/s)',
-                type: 'value'
+                type: 'value',
               },
               {
                 name: 'Ammonium Output (kg)',
@@ -744,6 +759,8 @@ function prepareFunnelData(nitrogenData, phosphorusData) {
 }
 
 export const ConcentrationChart = ({ data, type }) => {
+  const chart = useRef(null);
+  const instance = useRef(null);
   // Function to normalize data
   const normalizeData = (data, maxValues) => {
     return data.map(item => {
@@ -779,7 +796,7 @@ export const ConcentrationChart = ({ data, type }) => {
         text: `${type.charAt(0).toUpperCase() + type.slice(1)} Concentration (Normalized)`,
         left: 'center',
         textStyle: {
-          color: '#FFFFFF' // Set title color to white
+          color: '#FFFFFF'
         }
       },
       tooltip: {
@@ -813,7 +830,7 @@ export const ConcentrationChart = ({ data, type }) => {
 
   // Determine the type of concentration based on the dataset structure
   let selectedType;
-  if (data[0].Total_Nitrogen_Concentration !== undefined) {
+  if (data[1].Total_Nitrogen_Concentration !== undefined) {
     selectedType = 'nitrogen';
   } else if (data[0].Ammonia_Nitrogen_Concentration !== undefined) {
     selectedType = 'ammonia';
@@ -823,10 +840,27 @@ export const ConcentrationChart = ({ data, type }) => {
     throw new Error('Invalid data structure');
   }
 
-  const option = visualizeData(data, selectedType);
+  useEffect(()=>{
+    // initialize a new chart
+    instance.current = echarts.init(chart.current);
+    console.log(data);
+    // define chart options
+    const option = visualizeData(data, selectedType);
+
+    // apply the options
+    instance.current.setOption(option);
+
+    // cleanup function
+    return () =>{
+        instance.current.dispose();
+    }
+}, [chart])
 
   return (
-    <ReactEcharts option={option} />
+    <div 
+    ref={chart}
+    className="home-chartR" 
+    style={{ width: '100%', height: '100%'}}></div>
   );
 };
 
@@ -874,7 +908,7 @@ export const ConcentrationPieChart = ({ data1, data2, data3 }) => {
           data: pieData.map(item => ({
             value: item.value,
             name: item.name,
-            selected: item.name === 'Total Nitrogen' // Example of selecting one by default
+            selected: item.name === 'Total Nitrogen'
           }))
         },
         {
@@ -885,34 +919,17 @@ export const ConcentrationPieChart = ({ data1, data2, data3 }) => {
             length: 30
           },
           label: {
-            formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
-            backgroundColor: '#F6F8FC',
-            borderColor: '#8C8D8E',
-            borderWidth: 1,
-            borderRadius: 4,
             rich: {
               a: {
-                color: '#6E7079',
-                lineHeight: 22,
+                color: '#e4e4e4',
                 align: 'center'
               },
-              hr: {
-                borderColor: '#8C8D8E',
-                width: '100%',
-                borderWidth: 1,
-                height: 0
-              },
               b: {
-                color: '#4C5058',
+                color: '#fff',
                 fontSize: 14,
-                fontWeight: 'bold',
-                lineHeight: 33
               },
               per: {
                 color: '#fff',
-                backgroundColor: '#4C5058',
-                padding: [3, 4],
-                borderRadius: 4
               }
             }
           },

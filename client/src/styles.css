@@ -1,6 +1,6 @@
-html{
+/* html{
     margin: 0 auto;
-    background: var(--sColor);
+    background: rgb(38,30,53);
     color: var(--dColor);
     --sColor: #261E35;
     --aColor: #4DBBF6;
@@ -8,7 +8,90 @@ html{
     --cColor: #B783EB;
     --dColor: #ffffff;
     --eColor: #e4e4e4;
+    overflow-x: hidden;
+} */
+
+:root {
+    --aColor: #4DBBF6;
+    --bColor: #EC5EB7;
+    --cColor: #B783EB;
 }
+
+body {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8));
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: white;
+}
+
+p {
+    color: white;
+}
+
+/* Button Styles */
+button {
+    background-color: var(--aColor);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--bColor);
+}
+
+/* Link Styles */
+a {
+    color: var(--cColor);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--bColor);
+}
+
+/* Additional Styles for other UI elements */
+.card {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px;
+}
+
+.input-field {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    color: white;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.input-field::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* body {
+    margin: 0;
+    height: 100vh;
+    background: 
+        linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4)), 
+        url('./assets/background.png');
+    background-size: cover;
+    background-position: right; 
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+} */
 
 .container{
     width: 100vw;
@@ -16,18 +99,24 @@ html{
     display: grid;
     grid-template-columns: repeat(12, 1fr);
 }
+
 .topbar{
     grid-column-start: 1;
-    grid-column-end: 12;
+    grid-column-end: 13;
 }
+
 .sidebar{
     grid-column-start: 1;
     grid-column-end: 3;
 }
+
 .content{
     grid-column-start: 3;
-    grid-column-end: 12;
+    grid-column-end: 13;
+    padding: .5rem 1.5rem;
     position: relative;
+    background-image: url("./assets/background.png");
+    background-color: transparent;
 }
 
 /* 
@@ -80,10 +169,11 @@ BANNER: Banner stylesheet
 .banner{
     width: 90%;
     height: 95%;
-    box-shadow: 0 0 .3rem;
+    box-shadow: 0 0 .1rem #4dbbf6;
     border-radius: .3rem;
-    margin: .5rem auto;
+    margin-left: .5rem;
     font-size: 1rem;
+    line-height: 1.5;
     display: flex;
     position: relative;
     background: rgb(77,187,246);
@@ -92,21 +182,23 @@ BANNER: Banner stylesheet
 
 .banner-content{
     flex: .6;
-    padding: .3rem .5rem;
+    padding: .3rem;
 }
 
 .banner-button{
     border: none;
-    font-size: .8rem;
+    font-size: 1rem;
     background: var(--sColor);
     color: var(--dColor);
     box-shadow: 0 0 .1rem #261E35;
     border-radius: .2rem;
-    padding: .3rem .8rem;
+    padding: .5rem 1rem;
+    transition: ease-in 200ms;
 }
 
 .banner-button:hover{
     opacity: .8;
+    transform: scale(1.1);
 }
 
 .banner-image{
@@ -121,7 +213,6 @@ BANNER: Banner stylesheet
     object-fit: cover;
     object-position: center;
 }
-
 /* 
  FEATURES: Features stylesheet
 */
@@ -135,20 +226,25 @@ BANNER: Banner stylesheet
 }
 
 .feature-item{
-    width: 90%;
-    height: 5rem;
+    width: 98%;
+    height: 6.5rem;
     display: flex;
-    margin: .2rem .5rem;
-    box-shadow: 0 0 .1rem var(--bColor);
+    margin-right: 1rem;
+    box-shadow: 0 0 0.2rem #4dbbf6; 
     border-radius: .3rem;
     position: relative;
+}
+
+.feature-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.7);
 }
 
 .item-icon{
     flex: .3;
     width: 100%;
     height: 100%;
-    background: var(--bColor);
+    background: var(--aColor);
     display: grid;
     place-items: center;
     transition: ease-in 200ms;
@@ -168,7 +264,7 @@ BANNER: Banner stylesheet
 }
 
 .feature-title{
-    font-size: 1rem;
+    font-size: 1.25rem;
     opacity: .8;
 }
 
@@ -179,9 +275,10 @@ BANNER: Banner stylesheet
 }
 
 .feature-stats{
-    font-size: 1.35rem;
+    font-size: 2rem;
     font-weight: 800;
 }
+
 .feature-stats:hover{
     transform: scale(1.1);
 }
@@ -258,6 +355,21 @@ SIDEBAR: Sidebar Stylesheet
     align-items: center;
 }
 
+.active-item{
+    position: position;
+    background: transparent;
+    color: var(--aColor);
+}
+
+.active-item::after{
+    position: absolute;
+    left: 0;
+    width: 400px;
+    background: rgba(0, 0, 0, 0.4);
+    color: var(--aColor);
+    z-index: 99;
+}
+
 .sidebar-item:hover{
     transform: scale(1.1) translateX(-1rem);
     color: var(--aColor);
@@ -274,21 +386,21 @@ HOME: Home stylesheet
     width: 100%;
     display: grid;
     grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(4, 1fr);
     margin-left: .5rem;
     grid-row-gap: .5rem;
     grid-column-gap: .5rem;
 }
 
 .home-section{
-    min-height: 8rem;
+    height: 18rem;
     box-shadow: 0 0 .2rem #000;
     position: relative;
+    grid-row: span 2;
 }
 
 .section-menu{
     grid-column-start: 1;
-    grid-column-end: 8;
+    grid-column-end: 9;
     height: 9rem;
     display: flex;
     justify-content: space-between;
@@ -297,30 +409,29 @@ HOME: Home stylesheet
 
 .section-banner{
     grid-column-start: 1;
-    grid-column-end: 4;
+    grid-column-end: 5;
     box-shadow: none;
 }
 
 .section-chartR{
-    padding-left: 2rem;
-    grid-column-start: 4;
-    grid-column-end: 8;
+    grid-column-start: 5;
+    grid-column-end: 9;
 }
 .section-chartA{
     grid-column-start: 1;
-    grid-column-end: 5;
+    grid-column-end: 6;
 }
 .section-chartP{
-    grid-column-start: 5;
-    grid-column-end: 8;
+    grid-column-start: 6;
+    grid-column-end: 9;
 }
 .section-chartL{
-    grid-column-start: 5;
-    grid-column-end: 8;
+    grid-column-start: 6;
+    grid-column-end: 9;
 }
 .section-chartB{
     grid-column-start: 1;
-    grid-column-end: 5;
+    grid-column-end: 6;
 }
 /* 
 ANALYTICS: Analytics section stylesheet
@@ -328,15 +439,239 @@ ANALYTICS: Analytics section stylesheet
 .analytics-container{
     display: grid;
     grid-template-columns: repeat(9, 1fr);
-    grid-template-rows: repeat(4, 1fr);
     grid-row-gap: .5rem;
     grid-column-gap: .5rem;
 }
 
 .analytics-section{
+    height: 8rem;
     grid-column: span 3;
+    grid-row: span 2;
 }
 
 .analytics-chart{
     height: 30rem;
+}
+
+.section-transaction{
+    grid-column-start: 1;
+    grid-column-end: 10;
+}
+
+/* 
+Transaction Table: 
+*/
+.tableWrapper {
+    background: 
+    linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4)), 
+    url('./assets/background.png') !important;
+    color: #FFFFFF !important; 
+}
+
+.tableWrapper th, .tableWrapper td {
+    padding: 15px;
+    text-align: left;
+    color: #FFFFFF !important; 
+}
+
+.tableWrapper th {
+    background-color: #4DBBF6; /* Header background */
+}
+
+.tableWrapper tr:nth-child(even) {
+    background-color: #B783EB;
+    color: #FFFFFF !important; 
+}
+
+.tableWrapper tr:hover {
+    background-color: #EC5EB7; /* Hover effect */
+}
+
+.status-button {
+    background-color: #4DBBF6; /* Button background */
+    color: #FFFFFF; /* Button text color */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.status-button:hover {
+    background-color: #EC5EB7; /* Button hover effect */
+}
+/* 
+MARKETPLACE: 
+*/
+.marketplace {
+    background: 
+    linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4)), 
+    url('./assets/background.png') !important;
+    color: #FFFFFF !important; 
+    padding: 20px;
+    max-height: 100vh;
+    overflow: hidden;
+}
+
+.market-wrapper {
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.marketplace-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header-title {
+    color: #EC5EB7; /* Pink title */
+}
+
+.marketplace-body {
+    display: flex;
+    justify-content: space-between;
+}
+
+.marketplace-filters {
+    flex: 1;
+    margin-right: 20px;
+    background-color: var(--sColor);
+    color: #fff;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.filter {
+    margin-bottom: 15px;
+}
+
+.marketplace-main {
+    flex: 2;
+    display: inline-flex;
+    flex-wrap: wrap;
+}
+
+.nft-card {
+    max-width: 300px;
+    background-color: #261E35;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    margin-right: .8rem;
+    transition: transform 0.2s;
+}
+
+.nft-card:hover {
+    transform: scale(1.05); /* Scale effect on hover */
+}
+
+.nft-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.nft-title {
+    font-size: 1.2em;
+    margin: 10px 0 5px;
+    color: #EC5EB7; /* Pink text for NFT title */
+}
+
+.nft-description {
+    color: #FFFFFF; /* White text for NFT description */
+}
+
+.nft-data {
+    margin-top: 10px;
+    color: #FFFFFF; /* White text for NFT data */
+}
+
+button {
+    background-color: #EC5EB7; /* Pink button */
+    color: #FFFFFF; /* White text */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #B783EB; /* Light purple on hover */
+}
+
+/* 
+TRANSACTION: Transaction Stylesheet
+*/
+.transaction {
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.transaction-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.transaction-item {
+    margin-bottom: 20px;
+}
+
+.transaction-history {
+    margin-top: 10px;
+}
+
+h2 {
+    font-size: 2em;
+    margin-bottom: 10px;
+    color: white;
+}
+
+h3, h4 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: white; 
+}
+
+.table-container {
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    color: white; 
+}
+
+th {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+tr:hover {
+    background-color: rgba(255, 255, 255, 0.2); 
+}
+
+tr:focus {
+    outline: 2px solid var(--aColor);
+}
+
+@media (max-width: 600px) {
+    .transaction-wrapper {
+        flex-direction: column; 
+    }
+
+    th, td {
+        font-size: 0.9em;
+    }
 }

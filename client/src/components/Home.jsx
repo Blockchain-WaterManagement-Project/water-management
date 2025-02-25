@@ -12,12 +12,13 @@ import {
     MyPolarChart,
     MyRadarChart,
     ConcentrationPieChart} from "./Chart.jsx";
+import backgroundImage from "./../assets/background.png";
 
 function Home(){
     return(
         <div className="home">
             <div 
-                className="home-section section-menu">
+                className="section-menu">
                     <Features/></div>
             <div 
                 className="home-section section-banner">

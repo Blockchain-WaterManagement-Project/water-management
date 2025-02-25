@@ -1,7 +1,6 @@
 import { 
     ChangeCircle, 
     Home, 
-    LineStyle, 
     Report, 
     Share, 
     Storefront, 
@@ -20,7 +19,7 @@ function Sidebar(){
                     </h3>
                     <ul className="sidebar-list">
                         <Link to="/" className="link">
-                            <li className="sidebar-item active">
+                            <li className="sidebar-item">
                                 <Home className="sidebar-icon" />
                                 <span>
                                     Home
@@ -97,7 +96,7 @@ function Sidebar(){
                             </li>
                         </Link>
                         <Link to='/analytic'>
-                            <li className="sidebar-item">
+                            <li className="sidebar-item active-item">
                                 <Timeline className="sidebar-icon" />
                                 Analytics
                             </li>
