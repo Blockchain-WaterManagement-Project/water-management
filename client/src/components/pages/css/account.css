@@ -1,0 +1,75 @@
+.wallet {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    border-radius: 8px;
+    color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.wallet-wrapper {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+}
+
+.wallet-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.section-half{
+    grid-column: span 6;
+}
+
+h3, h4, h5 {
+    margin: 0 0 10px;
+}
+
+h6 {
+    margin: 5px 0;
+}
+
+/* Transaction list styles */
+.transaction-list {
+    max-height: 200px; 
+    overflow-y: auto; 
+}
+
+/* NFT gallery styles */
+.nft-gallery {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 10px; 
+}
+
+/* Card styles */
+.MuiCard-root {
+    transition: transform 0.2s; /* Smooth hover effect */
+}
+
+.MuiCard-root:hover {
+    transform: scale(1.02); /* Slightly enlarge on hover */
+}
+
+/* Button styles */
+button {
+    margin-top: 10px; /* Space above buttons */
+    transition: background-color 0.3s ease;
+}
+
+/* Button hover effect */
+button:hover {
+    background-color: #1976d2; /* Darker shade on hover */
+}
+
+/* Notification styles */
+.notifications {
+    color: hsl(45, 100%, 88%);
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 10px;
+}

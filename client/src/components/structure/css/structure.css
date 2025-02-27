@@ -1,0 +1,69 @@
+.form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: auto;
+    color: #fff;
+}
+
+/* Wrapper for the form elements */
+.form-wrapper {
+    width: 300px;
+}
+
+/* Section styles */
+.form-section {
+    margin-bottom: 20px;
+}
+
+/* Radio button section */
+.section-type {
+    display: flex;
+    justify-content: space-between; 
+}
+
+/* Text field styles */
+.section-text {
+    position: relative;
+}
+
+/* Button styles */
+.section-button {
+    display: flex;
+    justify-content: center;
+}
+
+/* Button hover effect */
+button:hover {
+    background-color: #3f51b5; /* Darker shade on hover */
+    transition: background-color 0.3s ease; 
+}
+
+/* Input field styles */
+input {
+    width: 100%; /* Full width */
+    padding: 10px; /* Padding for input */
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 4px; /* Rounded corners */
+    transition: border-color 0.3s ease; 
+}
+
+/* Input focus effect */
+input:focus {
+    border-color: #3f51b5; 
+    outline: none; 
+}
+
+/* Icon styles */
+.MuiInputAdornment-root {
+    margin-right: 8px; 
+}
+
+/* Loading spinner styles */
+.MuiCircularProgress-root {
+    color: white; 
+}
